@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Glow Protocol</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FEF6EE;--cream-dark:#F5EBDF;
+  --blush:#F2C4CE;--blush-dark:#D4909C;
+  --gold:#C9A96E;--gold-light:#E8D5B0;--gold-soft:#F0E4CC;
+  --mauve:#8B5A7B;--mauve-deep:#6B3A5B;--mauve-light:#B88AA8;
+  --rose:#E8A0B4;
+  --text:#3D2B35;--text-light:#8A7080;--text-faint:#B8A0AD;
+  --white:#FFFFFF;--danger:#C0392B;--danger-bg:#FDEDEC;
+  --cta:#5B3E8A;--cta-glow:rgba(91,62,138,0.35);
+  --card-shadow:0 2px 12px rgba(107,58,91,0.08);
+  --nav-height:64px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html,body{
+  height:100%;width:100%;overflow:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',sans-serif;
+  background:var(--cream);color:var(--text);
+  -webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;
+}
+body{display:flex;flex-direction:column}
+
+.overlay{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(62,30,48,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;transition:opacity .3s ease;pointer-events:none;
+}
+.overlay.visible{opacity:1;pointer-events:auto}
+.overlay-content{
+  background:var(--white);border-radius:24px;padding:40px 28px;
+  max-width:380px;width:90%;text-align:center;
+  transform:translateY(20px);transition:transform .3s ease;
+  box-shadow:0 20px 60px rgba(62,30,48,0.25);
+}
+.overlay.visible .overlay-content{transform:translateY(0)}
+
+#first-launch .overlay-content{max-width:400px}
+#first-launch h2{font-family:Georgia,'Times New Roman',serif;font-size:24px;color:var(--mauve-deep);margin-bottom:16px;letter-spacing:.5px}
+#first-launch p{font-size:15px;line-height:1.6;color:var(--text);margin-bottom:20px}
+#first-launch .warn-icon{font-size:48px;margin-bottom:12px;display:block}
+.btn-primary{
+  background:linear-gradient(135deg,var(--mauve),var(--rose));
+  color:var(--white);border:none;border-radius:16px;
+  padding:16px 32px;font-size:17px;font-weight:600;
+  cursor:pointer;width:100%;letter-spacing:.3px;
+  transition:transform .15s ease;
+}
+.btn-primary:active{transform:scale(0.97)}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#E74C3C)}
+
+header{
+  text-align:center;padding:16px 20px 8px;background:var(--cream);
+  position:relative;z-index:10;
+  padding-top:calc(env(safe-area-inset-top,16px) + 8px);
+}
+header h1{font-family:Georgia,'Times New Roman',serif;font-size:26px;color:var(--mauve-deep);letter-spacing:1.5px;font-weight:400}
+header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-spacing:.3px}
+
+#bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;
+  background:var(--white);border-top:1px solid var(--cream-dark);
+  padding-bottom:var(--safe-bottom);box-shadow:0 -2px 12px rgba(62,30,48,0.06);
+}
+.nav-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:10px 4px 6px;border:none;background:none;
+  color:var(--text-light);font-size:10px;cursor:pointer;
+  transition:color .2s ease;gap:3px;
+}
+.nav-tab .nav-icon{font-size:22px;transition:transform .2s ease}
+.nav-tab.active{color:var(--mauve)}
+.nav-tab.active .nav-icon{transform:scale(1.1)}
+
+.screen{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:12px 16px;
+  padding-bottom:calc(var(--nav-height) + var(--safe-bottom) + 16px);
+  display:none;
+}
+.screen.active{display:block}
+
+.day-header{font-family:Georgia,'Times New Roman',serif;font-size:20px;color:var(--mauve-deep);margin-bottom:14px;text-align:center}
+.day-header small{display:block;font-family:-apple-system,sans-serif;font-size:13px;color:var(--text-light);margin-top:2px;font-weight:400}
+
+.zone-card{
+  background:var(--white);border-radius:20px;padding:20px;margin-bottom:14px;
+  box-shadow:var(--card-shadow);position:relative;overflow:hidden;
+  border:1px solid rgba(200,180,190,0.15);
+}
+.zone-card.completed{opacity:0.5;filter:grayscale(0.3)}
+.zone-card.completed::after{
+  content:'✓ Complete';position:absolute;top:14px;right:16px;
+  background:var(--mauve-deep);color:var(--white);
+  padding:5px 14px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:0.5px;
+}
+.zone-emoji{font-size:32px;margin-bottom:4px;display:block}
+.zone-name{font-family:Georgia,serif;font-size:20px;color:var(--mauve-deep);margin-bottom:6px;padding-right:80px;font-weight:600}
+.zone-goals{font-size:12px;color:var(--text-faint);margin-bottom:14px;line-height:1.4}
+.zone-priority{
+  display:inline-block;background:var(--gold);color:var(--white);
+  font-size:10px;font-weight:700;letter-spacing:.8px;
+  padding:3px 8px;border-radius:6px;margin-left:6px;vertical-align:middle;
+}
+.zone-settings{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.zone-setting{background:var(--cream);border-radius:10px;padding:8px 6px;text-align:center;opacity:0.8}
+.zone-setting .label{font-size:9px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.5px}
+.zone-setting .value{font-size:14px;font-weight:600;color:var(--text-light);margin-top:2px}
+.zone-setting .value.blue-on{color:#3498DB}
+.zone-setting .value.blue-off{color:var(--text-faint)}
+.zone-setting .value.blue-toggle{color:#3498DB;font-size:12px}
+
+.zone-distance{
+  background:linear-gradient(135deg,var(--mauve-deep),var(--mauve));
+  border-radius:14px;padding:14px;text-align:center;margin-bottom:12px;
+}
+.zone-distance .label{font-size:10px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.zone-distance .value{font-size:30px;font-weight:800;color:var(--white);margin-top:2px;text-shadow:0 1px 4px rgba(0,0,0,0.15)}
+.zone-distance .sublabel{font-size:11px;color:rgba(255,255,255,0.7);margin-top:4px}
+.zone-duration{display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;color:var(--text-light)}
+.zone-duration strong{font-size:18px;color:var(--mauve-deep)}
+.zone-safety{font-size:11px;color:var(--text-faint);margin-top:8px;padding:8px 12px;background:transparent;border-radius:10px;line-height:1.5;border-left:2px solid var(--cream-dark);margin-left:2px}
+
+.zone-positions{background:var(--cream);border-radius:12px;padding:12px;margin-bottom:12px}
+.position-block{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:6px}
+.position-block strong{color:var(--mauve-deep)}
+.position-alert-note{font-size:12px;color:var(--gold);font-weight:600;margin-top:8px;text-align:center}
+
+.thyroid-warning{
+  background:var(--danger-bg);border:2px solid var(--danger);border-radius:14px;
+  padding:12px 16px;margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;
+}
+.thyroid-warning .warn-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.thyroid-warning .warn-text{font-size:13px;color:var(--danger);line-height:1.5;font-weight:500}
+
+.checkoff-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:16px;margin-top:14px;
+  background:var(--cta);
+  color:var(--white);border:none;border-radius:14px;
+  font-size:17px;font-weight:700;cursor:pointer;
+  transition:transform .15s ease;
+  box-shadow:0 4px 16px var(--cta-glow);
+  letter-spacing:0.3px;
+}
+.checkoff-btn:active{transform:scale(0.97);box-shadow:0 2px 8px var(--cta-glow)}
+.checkoff-btn.checked{background:var(--cream-dark);color:var(--gold);pointer-events:none;box-shadow:none;font-size:15px;padding:12px}
+.checkoff-btn.checked::before{content:'✓ '}
+.checkoff-btn-skip{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;padding:10px;margin-top:8px;
+  background:none;border:none;border-radius:10px;
+  color:var(--text-faint);font-size:12px;font-weight:400;cursor:pointer;
+  transition:color .15s ease;text-decoration:underline;
+  text-underline-offset:3px;
+}
+.checkoff-btn-skip:active{color:var(--mauve)}
+
+.rest-day{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:60vh;text-align:center;padding:40px 20px;
+}
+.rest-day .rest-emoji{font-size:64px;margin-bottom:20px}
+.rest-day h2{font-family:Georgia,serif;font-size:24px;color:var(--mauve-deep);margin-bottom:16px}
+.rest-day p{font-size:15px;color:var(--text-light);line-height:1.7;max-width:320px}
+
+.all-done{
+  text-align:center;padding:24px;margin-top:8px;
+  background:linear-gradient(135deg,var(--gold-soft),var(--blush));border-radius:20px;
+}
+.all-done .emoji{font-size:40px;margin-bottom:8px}
+.all-done h3{font-family:Georgia,serif;font-size:18px;color:var(--mauve-deep)}
+.all-done p{font-size:13px;color:var(--text-light);margin-top:4px}
+
+.precycle-banner{
+  text-align:center;padding:20px;margin-bottom:14px;
+  background:linear-gradient(135deg,var(--gold-soft),var(--blush));border-radius:20px;
+}
+.precycle-banner .emoji{font-size:32px;margin-bottom:6px;display:block}
+.precycle-banner h3{font-family:Georgia,serif;font-size:16px;color:var(--mauve-deep);margin-bottom:4px}
+.precycle-banner p{font-size:13px;color:var(--text-light);line-height:1.5}
+
+/* Timer */
+#timer-overlay{
+  background:linear-gradient(160deg,var(--mauve-deep) 0%,#3D2040 100%);
+  z-index:600;flex-direction:column;backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+.timer-container{
+  width:100%;max-width:420px;padding:20px;
+  display:flex;flex-direction:column;align-items:center;
+  height:100%;justify-content:space-between;
+  padding-top:calc(env(safe-area-inset-top,20px) + 12px);
+  padding-bottom:calc(var(--safe-bottom) + 20px);
+}
+.timer-header{text-align:center;width:100%}
+.timer-zone-name{font-family:Georgia,serif;font-size:22px;color:var(--white);margin-bottom:4px}
+.timer-zone-emoji{font-size:36px;margin-bottom:8px;display:block}
+.timer-settings{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;margin-top:16px}
+.timer-setting{background:rgba(255,255,255,0.12);border-radius:12px;padding:10px 6px;text-align:center}
+.timer-setting .label{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.4px}
+.timer-setting .value{font-size:16px;font-weight:700;color:var(--white);margin-top:3px}
+.timer-distance-banner{
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border-radius:14px;padding:14px;text-align:center;width:100%;margin-top:12px;
+}
+.timer-distance-banner .label{font-size:11px;color:var(--mauve-deep);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.timer-distance-banner .value{font-size:32px;font-weight:800;color:var(--mauve-deep);margin-top:2px}
+.timer-distance-banner .sublabel{font-size:12px;color:var(--mauve);margin-top:4px;font-weight:500}
+.timer-thyroid-warn{
+  background:rgba(192,57,43,0.9);border-radius:12px;
+  padding:10px 14px;margin-top:10px;width:100%;text-align:center;
+  font-size:13px;color:var(--white);font-weight:600;
+}
+
+.blue-toggle-wrap{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  margin-top:12px;padding:12px 16px;
+  background:rgba(255,255,255,0.1);border-radius:12px;width:100%;
+}
+.blue-toggle-label{color:rgba(255,255,255,0.7);font-size:14px}
+.toggle-switch{
+  width:52px;height:28px;border-radius:14px;
+  background:rgba(255,255,255,0.2);border:none;
+  position:relative;cursor:pointer;transition:background .3s ease;padding:0;
+}
+.toggle-switch.active{background:#3498DB}
+.toggle-knob{
+  position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;
+  background:white;transition:transform .3s ease;box-shadow:0 1px 3px rgba(0,0,0,0.2);display:block;
+}
+.toggle-switch.active .toggle-knob{transform:translateX(24px)}
+.blue-toggle-status{color:var(--white);font-size:14px;font-weight:600;min-width:30px}
+
+.timer-display{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1}
+.timer-ring{
+  width:220px;height:220px;border-radius:50%;
+  border:4px solid rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.timer-ring svg{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);transform:rotate(-90deg)}
+.timer-ring svg circle{fill:none;stroke-width:4;cx:50%;cy:50%;r:calc(50% - 2px)}
+.timer-ring .track{stroke:rgba(255,255,255,0.1)}
+.timer-ring .progress{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 0.5s linear}
+.timer-time{font-size:56px;font-weight:200;color:var(--white);font-variant-numeric:tabular-nums;letter-spacing:2px;z-index:1}
+.timer-label{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;z-index:1}
+.timer-confirm-text{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:12px;font-style:italic;text-align:center}
+
+.timer-controls{display:flex;gap:16px;width:100%;justify-content:center;padding:0 20px}
+.timer-btn{
+  padding:16px;border:none;border-radius:16px;
+  font-size:16px;font-weight:600;cursor:pointer;transition:transform .15s ease;
+}
+.timer-btn:active{transform:scale(0.95)}
+.timer-btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--mauve-deep);flex:1;max-width:160px}
+.timer-btn-secondary{background:rgba(255,255,255,0.15);color:var(--white);flex:1;max-width:160px}
+.timer-btn-done{
+  background:var(--white);
+  color:var(--cta);width:100%;max-width:300px;font-size:19px;font-weight:800;padding:20px;
+  box-shadow:0 4px 20px rgba(255,255,255,0.3);letter-spacing:0.3px;
+}
+.timer-btn-cancel{
+  background:none;border:none;color:rgba(255,255,255,0.45);
+  padding:14px;font-size:13px;margin-top:10px;width:100%;max-width:200px;
+  text-decoration:underline;text-underline-offset:3px;
+}
+
+#completion-modal .overlay-content{padding:32px 24px}
+#completion-modal .modal-emoji{font-size:48px;margin-bottom:12px}
+#completion-modal h3{font-family:Georgia,serif;font-size:20px;color:var(--mauve-deep);margin-bottom:8px}
+#completion-modal p{font-size:14px;color:var(--text-light);margin-bottom:20px;line-height:1.5}
+.modal-confirm-btn{
+  background:var(--cta);
+  color:var(--white);border:none;border-radius:14px;
+  padding:16px 24px;font-size:17px;font-weight:700;
+  cursor:pointer;width:100%;margin-bottom:10px;transition:transform .15s ease;
+  box-shadow:0 4px 16px var(--cta-glow);
+}
+.modal-confirm-btn:active{transform:scale(0.97)}
+.modal-cancel-btn{background:none;border:none;color:var(--text-faint);font-size:13px;cursor:pointer;padding:8px;text-decoration:underline;text-underline-offset:3px}
+
+#midshift-modal{z-index:1100;background:rgba(120,30,30,0.7)}
+#midshift-modal .overlay-content{border:2px solid var(--danger)}
+
+.ref-card{
+  background:var(--white);border-radius:16px;padding:16px;margin-bottom:10px;
+  box-shadow:var(--card-shadow);border:1px solid rgba(200,180,190,0.12);
+}
+.ref-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ref-card-header .emoji{font-size:22px}
+.ref-card-header .name{font-family:Georgia,serif;font-size:15px;color:var(--mauve-deep)}
+.ref-card-header .priority{font-size:9px;background:var(--gold);color:var(--white);padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:.5px;margin-left:auto}
+.ref-settings{display:flex;gap:6px;flex-wrap:wrap}
+.ref-pill{background:var(--cream);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--text)}
+.ref-pill strong{color:var(--mauve-deep)}
+
+.weekly-grid{display:flex;flex-direction:column;gap:8px}
+.week-row{background:var(--white);border-radius:14px;padding:14px 16px;box-shadow:var(--card-shadow);border:1px solid rgba(200,180,190,0.1)}
+.week-row.today{border:2px solid var(--mauve);background:linear-gradient(135deg,var(--white),var(--cream))}
+.week-row.rest-row{background:var(--cream-dark);opacity:0.7}
+.week-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.week-day-name{font-weight:700;font-size:14px;color:var(--mauve-deep)}
+.week-day-name small{font-weight:400;color:var(--text-light);margin-left:6px;font-size:12px}
+.week-status{font-size:12px;color:var(--text-light)}
+.week-zones{display:flex;flex-wrap:wrap;gap:6px}
+.week-zone-chip{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:12px;background:var(--cream);color:var(--text)}
+.week-zone-chip.done{background:var(--gold-light);color:var(--mauve-deep);font-weight:600}
+.week-zone-chip .chip-check{font-size:11px}
+.week-rest-label{font-size:13px;color:var(--text-light);font-style:italic}
+.streak-badge{
+  text-align:center;margin-bottom:12px;padding:14px;
+  background:linear-gradient(135deg,var(--gold-soft),var(--blush));border-radius:16px;
+}
+.streak-badge .streak-num{font-size:32px;font-weight:800;color:var(--mauve-deep)}
+.streak-badge .streak-label{font-size:12px;color:var(--text-light);margin-top:2px}
+
+.history-empty{text-align:center;padding:60px 20px;color:var(--text-light)}
+.history-empty .emoji{font-size:40px;margin-bottom:12px;display:block}
+.history-day{background:var(--white);border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:var(--card-shadow)}
+.history-date{font-family:Georgia,serif;font-size:15px;color:var(--mauve-deep);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--cream-dark)}
+.history-zones{display:flex;flex-wrap:wrap;gap:6px}
+.history-zone-tag{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:8px;background:var(--gold-soft);font-size:12px;color:var(--mauve-deep)}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.zone-card{animation:fadeIn .35s ease both}
+.zone-card:nth-child(2){animation-delay:.07s}
+.zone-card:nth-child(3){animation-delay:.14s}
+.zone-card:nth-child(4){animation-delay:.21s}
+.screen::-webkit-scrollbar{width:0;display:none}
+.screen{scrollbar-width:none}
+
+/* Desktop: 3-column zone grid */
+@media(min-width:768px){
+  .screen{max-width:1080px;margin:0 auto;padding-left:24px;padding-right:24px}
+  header{max-width:1080px;margin:0 auto;width:100%}
+  .zones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .zones-grid .zone-card{margin-bottom:0}
+  .timer-container{max-width:480px}
+  .weekly-grid{max-width:600px;margin:0 auto}
+  .history-day{max-width:600px;margin-left:auto;margin-right:auto}
+  .rest-day{max-width:600px;margin:0 auto}
+  .all-done{max-width:600px;margin:16px auto 0}
+  .precycle-banner{max-width:600px;margin:0 auto 16px}
+  .day-header{max-width:600px;margin-left:auto;margin-right:auto;margin-bottom:16px}
+}
+/* Tablet: 2 columns if too narrow for 3 */
+@media(min-width:768px) and (max-width:1023px){
+  .zones-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div id="first-launch" class="overlay">
+  <div class="overlay-content" style="max-width:400px">
+    <span class="warn-icon" style="font-size:48px;margin-bottom:12px;display:block">⚠️</span>
+    <h2 style="font-family:Georgia,serif;font-size:24px;color:var(--mauve-deep);margin-bottom:16px">Important Safety Notice</h2>
+    <p style="font-size:15px;line-height:1.6;color:var(--text);margin-bottom:20px">This panel outputs <strong>160 mW/cm² at 6 inches</strong> — one of the most powerful consumer red light devices available. Always follow the recommended distance for each zone. <strong>Closer or longer does NOT mean better — it can reverse your results.</strong> These protocols are science-based and designed for your safety and maximum benefit.</p>
+    <button class="btn-primary" onclick="handleFirstLaunch()">I Understand — Let's Begin</button>
+  </div>
+</div>
+
+<div id="completion-modal" class="overlay">
+  <div class="overlay-content">
+    <div class="modal-emoji">✅</div>
+    <h3 id="modal-zone-name"></h3>
+    <p>Confirm you completed this zone today?</p>
+    <button class="modal-confirm-btn" onclick="handleModalConfirm()">Mark as Complete ✓</button>
+    <button class="modal-cancel-btn" onclick="handleModalCancel()">Not yet</button>
+  </div>
+</div>
+
+<div id="midshift-modal" class="overlay">
+  <div class="overlay-content" style="max-width:360px;border:2px solid var(--danger)">
+    <div style="font-size:48px;margin-bottom:12px">⚠️</div>
+    <h3 style="font-family:Georgia,serif;font-size:20px;color:var(--danger);margin-bottom:12px">Time to Shift Position</h3>
+    <p style="font-size:15px;color:var(--text);margin-bottom:20px;line-height:1.6">Move back so your <strong>chest and thyroid</strong> are now <strong>16 inches</strong> from the panel.<br><br>Same settings — the distance automatically protects your thyroid. Do not move closer.</p>
+    <button class="btn-primary btn-danger" onclick="handleMidShiftConfirm()">I've Shifted — Continue Timer</button>
+  </div>
+</div>
+
+<div id="main-app" style="display:none">
+  <header>
+    <h1>Glow Protocol ✨</h1>
+    <div class="subtitle" id="header-date"></div>
+  </header>
+  <div id="screen-today" class="screen active"></div>
+  <div id="screen-reference" class="screen"></div>
+  <div id="screen-weekly" class="screen"></div>
+  <div id="screen-history" class="screen"></div>
+  <nav id="bottom-nav">
+    <button class="nav-tab active" data-tab="today"><span class="nav-icon">🏠</span>Today</button>
+    <button class="nav-tab" data-tab="reference"><span class="nav-icon">📋</span>Reference</button>
+    <button class="nav-tab" data-tab="weekly"><span class="nav-icon">📊</span>Weekly</button>
+    <button class="nav-tab" data-tab="history"><span class="nav-icon">📜</span>History</button>
+  </nav>
+</div>
+
+<div id="timer-overlay" class="overlay">
+  <div class="timer-container" id="timer-container"></div>
+</div>
+
+<script>
+/* ─── Zone Data ─── */
+var ZONES = {
+  'face': {
+    name: 'Face', emoji: '🌸',
+    distance: '16–18 inches', red: 80, nir: 20, blue: 'toggle', duration: 10,
+    goals: ['Acne', 'Dark Spots', 'Wrinkles', 'Skin Refresh', 'Skin Tightening', 'Stretch Mark Reduction', 'Collagen Rebuilding'],
+    note: 'Toggle blue ON for acne, OFF for anti-aging. You can do both in the same session. Stay 16\u201318 inches \u2014 this device is powerful and this distance is manufacturer-verified for facial safety.',
+    hasThyroidWarning: false, isPriority: false, hasBlueToggle: true, isTwoPosition: false
+  },
+  'full-spine': {
+    name: 'Full Spine', emoji: '🦴',
+    distance: '8–12 inches', red: 60, nir: 100, blue: false, duration: 10,
+    goals: ['Pain Relief', 'Inflammation', 'Nerve Health', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding'],
+    note: 'Stand or sit against the panel. Full spine treated in one pass.',
+    hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
+  },
+  'right-tricep': {
+    name: 'Right Tricep', emoji: '💪',
+    distance: '8–12 inches', red: 70, nir: 100, blue: false, duration: 10,
+    goals: ['Torn Tendon Healing', 'Injury Recovery', 'Skin Tightening', 'Stretch Mark Reduction', 'Collagen Rebuilding'],
+    note: 'Priority zone \u2014 consistency is more important than anything else for tendon healing.',
+    hasThyroidWarning: false, isPriority: true, hasBlueToggle: false, isTwoPosition: false
+  },
+  'torso-front': {
+    name: 'Torso Front', emoji: '🌿',
+    distance: '8" \u2192 16"', red: 60, nir: 80, blue: false, duration: 10,
+    goals: ['Abdominal Fat Reduction', 'Hormonal Support', 'Circulation', 'Gut Health', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation'],
+    note: '',
+    hasThyroidWarning: true, isPriority: false, hasBlueToggle: false, isTwoPosition: true,
+    thyroidWarningText: 'Thyroid-safe settings active. Chest/thyroid must be at 16 inches. Do not increase NIR beyond 80% or move closer than 8 inches for abdomen, 16 inches for thyroid.',
+    positions: [
+      { label: 'Position 1 \u2014 Abdomen & Ovaries', distance: '8 inches', minutes: 'Min 1\u20136' },
+      { label: 'Position 2 \u2014 Chest & Thyroid', distance: '16 inches', minutes: 'Min 7\u201310' }
+    ]
+  },
+  'legs-below-knee': {
+    name: 'Legs Below Knee', emoji: '🦵',
+    distance: '12 inches', red: 80, nir: 60, blue: false, duration: 10,
+    goals: ['Circulation', 'Dark Spots', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation'],
+    note: 'Keep legs 12 inches from panel.',
+    hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
+  },
+  'glutes-thighs': {
+    name: 'Glutes & Thighs', emoji: '🍑',
+    distance: '8–12 inches', red: 90, nir: 70, blue: false, duration: 10,
+    goals: ['Cellulite Reduction', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation', 'Muscle Tone & Recovery'],
+    note: 'Higher red % maximizes collagen for stretch marks and skin tightening. NIR kept at 70% to focus on muscle recovery and collagen \u2014 not fat disruption.',
+    hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
+  }
+};
+
+/* ─── 7-Day Cycle ─── */
+var CYCLE = {
+  1: ['face', 'right-tricep', 'full-spine'],
+  2: ['glutes-thighs', 'legs-below-knee', 'torso-front'],
+  3: ['face', 'right-tricep', 'glutes-thighs'],
+  4: ['full-spine', 'legs-below-knee', 'torso-front'],
+  5: ['face', 'right-tricep', 'full-spine'],
+  6: ['glutes-thighs', 'legs-below-knee', 'right-tricep'],
+  7: []
+};
+var DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+/* ─── State ─── */
+var timerInterval = null;
+var timerSecondsLeft = 0;
+var timerTotalSeconds = 0;
+var timerPaused = false;
+var timerZoneId = null;
+var timerBlueOn = false;
+var torsoShiftConfirmed = false;
+var wakeLock = null;
+var pendingCompletionZone = null;
+
+/* ─── LocalStorage ─── */
+function getSessionData() {
+  try { return JSON.parse(localStorage.getItem('glowProtocol_sessions') || '{}'); } catch(e) { return {}; }
+}
+function saveSessionData(d) { localStorage.setItem('glowProtocol_sessions', JSON.stringify(d)); }
+function todayKey() {
+  var d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function dateToKey(d) {
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function parseDateKey(s) { var p=s.split('-'); return new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2])); }
+
+function isZoneDone(dateStr, zoneId) {
+  var s = getSessionData(); var t = s[dateStr]; if (!t) return false;
+  var v = t[zoneId]; return v === true || (v && typeof v === 'object' && v.done === true);
+}
+function markZoneDone(zoneId, extras) {
+  var s = getSessionData(); var k = todayKey();
+  if (!s[k]) s[k] = {};
+  s[k][zoneId] = extras || true;
+  saveSessionData(s);
+}
+
+function getCycleStart() { return localStorage.getItem('glowProtocol_cycleStart'); }
+function setCycleStart(v) { localStorage.setItem('glowProtocol_cycleStart', v); }
+function hasLaunched() { return localStorage.getItem('glowProtocol_v3') === '1'; }
+function setLaunched() { localStorage.setItem('glowProtocol_v3', '1'); }
+
+/* ─── Cycle Calc ─── */
+function getCycleDayForDate(dateStr) {
+  var cs = getCycleStart(); if (!cs) return {cycleDay:0,isPreCycle:true,cycleNumber:0};
+  var start = parseDateKey(cs); var target = parseDateKey(dateStr);
+  start.setHours(0,0,0,0); target.setHours(0,0,0,0);
+  var diff = Math.round((target.getTime()-start.getTime())/86400000);
+  if (diff < 0) return {cycleDay:0,isPreCycle:true,cycleNumber:0};
+  return {cycleDay:(diff%7)+1, isPreCycle:false, cycleNumber:Math.floor(diff/7)+1};
+}
+function getCurrentCycleStartDate() {
+  var cs = getCycleStart(); if (!cs) return null;
+  var start = parseDateKey(cs); var today = new Date();
+  start.setHours(0,0,0,0); today.setHours(0,0,0,0);
+  var diff = Math.round((today.getTime()-start.getTime())/86400000);
+  if (diff < 0) return start;
+  return new Date(start.getTime() + Math.floor(diff/7)*7*86400000);
+}
+
+/* ─── Global Button Handlers ─── */
+function handleFirstLaunch() {
+  setLaunched(); hideOverlay('first-launch'); showMainApp();
+}
+function handleModalConfirm() {
+  if (pendingCompletionZone) { markZoneDone(pendingCompletionZone); pendingCompletionZone = null; }
+  hideOverlay('completion-modal'); renderToday();
+}
+function handleModalCancel() {
+  pendingCompletionZone = null; hideOverlay('completion-modal');
+}
+function handleMidShiftConfirm() {
+  torsoShiftConfirmed = true;
+  hideOverlay('midshift-modal');
+  timerPaused = false;
+  var z = ZONES[timerZoneId];
+  renderTimerScreen(z, timerZoneId, false);
+  startTimer();
+}
+function handleTimerComplete() {
+  var zoneId = timerZoneId;
+  if (zoneId === 'face') {
+    markZoneDone(zoneId, {done:true});
+    var s = getSessionData(); s[todayKey()].face_blue = timerBlueOn; saveSessionData(s);
+  } else { markZoneDone(zoneId); }
+  hideOverlay('timer-overlay'); releaseWakeLock(); renderToday();
+}
+function handleTimerCloseNoMark() { hideOverlay('timer-overlay'); releaseWakeLock(); }
+function handleTimerPause() {
+  timerPaused = !timerPaused;
+  renderTimerScreen(ZONES[timerZoneId], timerZoneId, false);
+  if (!timerPaused) startTimer();
+}
+function handleTimerCancel() {
+  clearInterval(timerInterval); timerInterval = null;
+  hideOverlay('timer-overlay'); releaseWakeLock();
+}
+function handleBlueToggle() {
+  timerBlueOn = !timerBlueOn;
+  var btn = document.getElementById('blue-toggle-btn');
+  if (btn) btn.classList.toggle('active', timerBlueOn);
+  var lbl = document.getElementById('blue-toggle-label');
+  if (lbl) lbl.textContent = timerBlueOn ? 'ON' : 'OFF';
+  var vals = document.querySelectorAll('#timer-container .timer-setting .value');
+  if (vals[2]) vals[2].textContent = timerBlueOn ? 'ON' : 'OFF';
+}
+function showCompletionModal(zoneId) {
+  pendingCompletionZone = zoneId;
+  var z = ZONES[zoneId];
+  document.getElementById('modal-zone-name').textContent = z.emoji + ' ' + z.name;
+  showOverlay('completion-modal');
+}
+
+/* ─── Navigation ─── */
+function switchTab(t) {
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.querySelectorAll('.nav-tab').forEach(function(n){n.classList.remove('active')});
+  document.getElementById('screen-'+t).classList.add('active');
+  document.querySelector('.nav-tab[data-tab="'+t+'"]').classList.add('active');
+  if(t==='today')renderToday();else if(t==='reference')renderReference();
+  else if(t==='weekly')renderWeekly();else if(t==='history')renderHistory();
+}
+
+/* ─── Render: Today ─── */
+function renderToday() {
+  var el = document.getElementById('screen-today');
+  var tk = todayKey(); var info = getCycleDayForDate(tk); var now = new Date();
+
+  if (info.isPreCycle) {
+    var sessions = getSessionData(); var td = sessions[tk] || {};
+    var done = Object.keys(td).filter(function(k){return k!=='face_blue'&&(td[k]===true||(td[k]&&td[k].done))});
+    var html = '<div class="day-header">Getting Started<small>'+formatDateNice(now)+'</small></div>';
+    html += '<div class="precycle-banner"><span class="emoji">🌟</span><h3>Welcome to Glow Protocol</h3>';
+    html += '<p>Your 7-day cycle begins tomorrow with Day 1! Today\'s session has been logged below.</p></div>';
+    html += '<div class="zones-grid">';
+    done.forEach(function(id){ if(ZONES[id]) html += buildZoneCard(id,true); });
+    html += '</div>';
+    el.innerHTML = html; return;
+  }
+
+  var zones = CYCLE[info.cycleDay] || [];
+  if (zones.length === 0) {
+    el.innerHTML = '<div class="rest-day"><div class="rest-emoji">🧘‍♀️</div><h2>Rest Day</h2>'+
+      '<p>Cycle Day 7 of 7<br><br>Today is your rest day. This is when your cells repair, collagen forms, and results actually happen. Your body is working \u2014 let it.</p></div>';
+    return;
+  }
+
+  var allDone = zones.every(function(z){return isZoneDone(tk,z)});
+  var html = '<div class="day-header">Cycle Day '+info.cycleDay+' of 7<small>'+
+    DAY_NAMES[now.getDay()]+', '+formatDateNice(now)+' \u00b7 Cycle '+info.cycleNumber+'</small></div>';
+  html += '<div class="zones-grid">';
+  zones.forEach(function(id){ html += buildZoneCard(id, true); });
+  html += '</div>';
+  if (allDone) {
+    html += '<div class="all-done"><div class="emoji">🌟</div><h3>All zones complete!</h3>'+
+      '<p>Beautiful work today. Let your body absorb the light.</p></div>';
+  }
+  el.innerHTML = html;
+}
+
+function buildZoneCard(zoneId, showCheckoff) {
+  var z = ZONES[zoneId]; if(!z)return '';
+  var done = isZoneDone(todayKey(), zoneId);
+  var h = '<div class="zone-card'+(done?' completed':'')+'">';
+  h += '<span class="zone-emoji">'+z.emoji+'</span>';
+  h += '<div class="zone-name">'+z.name;
+  if(z.isPriority) h+='<span class="zone-priority">PRIORITY</span>';
+  h += '</div>';
+  h += '<div class="zone-goals">'+z.goals.join(' \u00b7 ')+'</div>';
+
+  if (z.hasThyroidWarning) {
+    var wt = z.thyroidWarningText || 'Thyroid-safe settings active.';
+    h += '<div class="thyroid-warning"><span class="warn-icon">⚠️</span><span class="warn-text">'+wt+'</span></div>';
+  }
+
+  if (z.isTwoPosition) {
+    h += '<div class="zone-distance"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div><div class="sublabel">Position change at 6 min</div></div>';
+    h += '<div class="zone-positions">';
+    z.positions.forEach(function(p){
+      h += '<div class="position-block"><strong>'+p.label+' ('+p.minutes+'):</strong> '+p.distance+' from panel</div>';
+    });
+    h += '<div class="position-alert-note">\u23f0 App will alert you at 6 min to shift position</div></div>';
+  } else {
+    h += '<div class="zone-distance"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div></div>';
+  }
+
+  h += '<div class="zone-settings">';
+  h += '<div class="zone-setting"><div class="label">Red</div><div class="value">'+z.red+'%</div></div>';
+  h += '<div class="zone-setting"><div class="label">NIR</div><div class="value">'+z.nir+'%</div></div>';
+  if(z.hasBlueToggle) h+='<div class="zone-setting"><div class="label">Blue</div><div class="value blue-toggle">Your Choice</div></div>';
+  else h+='<div class="zone-setting"><div class="label">Blue</div><div class="value blue-off">OFF</div></div>';
+  h += '</div>';
+
+  h += '<div class="zone-duration">Duration: <strong>'+z.duration+' min</strong></div>';
+  if(z.note) h += '<div class="zone-safety">'+z.note+'</div>';
+
+  if (showCheckoff) {
+    if(done) {
+      h += '<button class="checkoff-btn checked" disabled>Completed</button>';
+    } else {
+      h += '<button class="checkoff-btn" onclick="openTimer(\''+zoneId+'\')">Start Timer</button>';
+      h += '<button class="checkoff-btn-skip" onclick="showCompletionModal(\''+zoneId+'\')">Mark Complete Without Timer</button>';
+    }
+  } else {
+    h += '<button class="checkoff-btn" onclick="openTimer(\''+zoneId+'\')">Start Timer</button>';
+  }
+  h += '</div>'; return h;
+}
+
+/* ─── Render: Reference ─── */
+function renderReference() {
+  var el = document.getElementById('screen-reference');
+  var html = '<div class="day-header">Quick Reference<small>Tap any zone to start a timer</small></div>';
+  Object.keys(ZONES).forEach(function(id){
+    var z = ZONES[id];
+    html += '<div class="ref-card"><div class="ref-card-header">';
+    html += '<span class="emoji">'+z.emoji+'</span><span class="name">'+z.name+'</span>';
+    if(z.isPriority) html+='<span class="priority">PRIORITY</span>';
+    html += '</div>';
+    if(z.hasThyroidWarning) html+='<div class="thyroid-warning" style="margin-bottom:8px;padding:8px 12px"><span class="warn-icon">⚠️</span><span class="warn-text" style="font-size:12px">Thyroid-safe \u2014 NIR \u2264 80%, min 16\u2033 for thyroid</span></div>';
+    html += '<div class="ref-settings">';
+    html += '<span class="ref-pill">\ud83d\udccf <strong>'+z.distance+'</strong></span>';
+    html += '<span class="ref-pill">\ud83d\udd34 Red <strong>'+z.red+'%</strong></span>';
+    html += '<span class="ref-pill">\ud83d\udfe4 NIR <strong>'+z.nir+'%</strong></span>';
+    html += z.hasBlueToggle ? '<span class="ref-pill">\ud83d\udd35 Blue <strong>Your Choice</strong></span>' : '<span class="ref-pill">\u26aa Blue <strong>OFF</strong></span>';
+    html += '<span class="ref-pill">\u23f1 <strong>'+z.duration+' min</strong></span>';
+    html += '</div>';
+    html += '<button class="checkoff-btn" onclick="openTimer(\''+id+'\')" style="margin-top:10px;padding:10px;font-size:14px">Start Timer</button>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+/* ─── Render: Weekly ─── */
+function renderWeekly() {
+  var el = document.getElementById('screen-weekly');
+  var sessions = getSessionData();
+  var csd = getCurrentCycleStartDate();
+  if (!csd) { el.innerHTML='<div class="history-empty"><span class="emoji">\ud83d\udcca</span><p>Your cycle begins tomorrow!<br>Come back for your first Cycle Day.</p></div>'; return; }
+  var tk = todayKey();
+  var streak = calculateStreak();
+  var html = '<div class="day-header">Current Cycle<small>7-day rolling cycle</small></div>';
+  if (streak > 0) html += '<div class="streak-badge"><div class="streak-num">\ud83d\udd25 '+streak+'</div><div class="streak-label">day streak</div></div>';
+  html += '<div class="weekly-grid">';
+  for (var i=0;i<7;i++) {
+    var d = new Date(csd.getTime()+i*86400000);
+    var ds = dateToKey(d); var ci = getCycleDayForDate(ds);
+    var zones = CYCLE[ci.cycleDay]||[]; var isRest=zones.length===0; var isToday=ds===tk;
+    html += '<div class="week-row'+(isToday?' today':'')+(isRest?' rest-row':'')+'">';
+    html += '<div class="week-row-header"><span class="week-day-name">Day '+ci.cycleDay+'<small>'+formatDateShort(d)+'</small></span>';
+    if(isRest){html+='<span class="week-status">Rest</span>';}
+    else{var dc=zones.filter(function(z){return isZoneDone(ds,z)}).length;html+='<span class="week-status">'+dc+'/'+zones.length+'</span>';}
+    html += '</div>';
+    if(isRest){html+='<span class="week-rest-label">\ud83e\uddd8\u200d\u2640\ufe0f Recovery & cellular repair</span>';}
+    else{html+='<div class="week-zones">';zones.forEach(function(zid){var z=ZONES[zid];var dn=isZoneDone(ds,zid);html+='<span class="week-zone-chip'+(dn?' done':'')+'">';if(dn)html+='<span class="chip-check">\u2713</span>';html+=z.emoji+' '+z.name+'</span>';});html+='</div>';}
+    html += '</div>';
+  }
+  html += '</div>'; el.innerHTML = html;
+}
+
+function calculateStreak() {
+  var sessions = getSessionData(); var streak = 0;
+  var d = new Date(); d.setHours(0,0,0,0);
+  while(true) {
+    var k = dateToKey(d); var ci = getCycleDayForDate(k);
+    var isRest = !ci.isPreCycle && ci.cycleDay === 7;
+    var has = false; var dd = sessions[k];
+    if(dd){for(var key in dd){if(key!=='face_blue'){var v=dd[key];if(v===true||(v&&v.done)){has=true;break;}}}}
+    if(has||(isRest&&streak>0)){streak++;d.setDate(d.getDate()-1);}
+    else if(ci.isPreCycle&&has){streak++;d.setDate(d.getDate()-1);}
+    else break;
+  }
+  return streak;
+}
+
+/* ─── Render: History ─── */
+function renderHistory() {
+  var el = document.getElementById('screen-history');
+  var sessions = getSessionData(); var dates = Object.keys(sessions).sort().reverse();
+  if(dates.length===0){el.innerHTML='<div class="history-empty"><span class="emoji">\ud83d\udcdd</span><p>No sessions recorded yet.</p></div>';return;}
+  var html = '<div class="day-header">Past Sessions<small>Your treatment history</small></div>';
+  dates.forEach(function(ds){
+    var dd = sessions[ds];
+    var zids = Object.keys(dd).filter(function(k){if(k==='face_blue')return false;var v=dd[k];return v===true||(v&&v.done)});
+    if(zids.length===0)return;
+    var d = parseDateKey(ds); var ci = getCycleDayForDate(ds);
+    var cl = ci.isPreCycle?'Pre-Cycle':'Day '+ci.cycleDay;
+    html += '<div class="history-day"><div class="history-date">'+DAY_NAMES[d.getDay()]+', '+formatDateNice(d)+' \u00b7 '+cl+'</div>';
+    html += '<div class="history-zones">';
+    zids.forEach(function(zid){var z=ZONES[zid];if(!z)return;var lbl=z.emoji+' '+z.name;
+      if(zid==='face'&&dd.face_blue!==undefined)lbl+=dd.face_blue?' (Blue ON)':' (Blue OFF)';
+      html+='<span class="history-zone-tag">'+lbl+'</span>';});
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+/* ─── Timer ─── */
+function openTimer(zoneId) {
+  var z = ZONES[zoneId]; if(!z)return;
+  timerZoneId = zoneId;
+  timerTotalSeconds = Math.min(z.duration,10)*60;
+  timerSecondsLeft = timerTotalSeconds;
+  timerPaused = false; timerBlueOn = false; torsoShiftConfirmed = false;
+  renderTimerScreen(z, zoneId, false);
+  showOverlay('timer-overlay');
+  requestWakeLock(); startTimer();
+}
+
+function renderTimerScreen(z, zoneId, finished) {
+  var c = document.getElementById('timer-container');
+  var circ = 2*Math.PI*108;
+  var prog = finished ? circ : ((timerTotalSeconds-timerSecondsLeft)/timerTotalSeconds)*circ;
+  var off = circ - prog;
+
+  var inPos1 = z.isTwoPosition && !torsoShiftConfirmed;
+  var inPos2 = z.isTwoPosition && torsoShiftConfirmed;
+  var curDist = z.distance;
+  var posLabel = '';
+  if(inPos1){curDist=z.positions[0].distance;posLabel=z.positions[0].label;}
+  else if(inPos2){curDist=z.positions[1].distance;posLabel=z.positions[1].label;}
+
+  var h = '<div class="timer-header">';
+  h += '<span class="timer-zone-emoji">'+z.emoji+'</span>';
+  h += '<div class="timer-zone-name">'+z.name+'</div>';
+  h += '<div class="timer-settings">';
+  h += '<div class="timer-setting"><div class="label">Red</div><div class="value">'+z.red+'%</div></div>';
+  h += '<div class="timer-setting"><div class="label">NIR</div><div class="value">'+z.nir+'%</div></div>';
+  h += '<div class="timer-setting"><div class="label">Blue</div><div class="value">'+(z.hasBlueToggle?(timerBlueOn?'ON':'OFF'):'OFF')+'</div></div>';
+  h += '<div class="timer-setting"><div class="label">Time</div><div class="value">'+z.duration+'m</div></div>';
+  h += '</div>';
+
+  h += '<div class="timer-distance-banner"><div class="label">Distance from Panel</div><div class="value">'+curDist+'</div>';
+  if(posLabel) h+='<div class="sublabel">'+posLabel+'</div>';
+  h += '</div>';
+
+  if(z.hasBlueToggle && !finished){
+    h += '<div class="blue-toggle-wrap"><span class="blue-toggle-label">Blue Light</span>';
+    h += '<button class="toggle-switch'+(timerBlueOn?' active':'')+'" id="blue-toggle-btn" onclick="handleBlueToggle()"><span class="toggle-knob"></span></button>';
+    h += '<span class="blue-toggle-status" id="blue-toggle-label">'+(timerBlueOn?'ON':'OFF')+'</span></div>';
+  }
+  if(z.hasThyroidWarning) h+='<div class="timer-thyroid-warn">\u26a0\ufe0f Thyroid-safe settings \u2014 chest/thyroid at 16\u2033, NIR \u2264 80%</div>';
+  h += '</div>';
+
+  h += '<div class="timer-display"><div class="timer-ring">';
+  h += '<svg viewBox="0 0 220 220"><circle class="track" cx="110" cy="110" r="108"/>';
+  h += '<circle class="progress" id="timer-progress" cx="110" cy="110" r="108" stroke-dasharray="'+circ+'" stroke-dashoffset="'+off+'"/></svg>';
+  h += '<span class="timer-time" id="timer-time">'+formatTime(timerSecondsLeft)+'</span>';
+  h += '<span class="timer-label">'+(finished?'Complete!':(timerPaused?'Paused':'Remaining'))+'</span>';
+  h += '</div></div>';
+
+  h += '<div style="width:100%;display:flex;flex-direction:column;align-items:center">';
+  if(finished){
+    h += '<div class="timer-confirm-text">Confirm you completed this zone today?</div>';
+    h += '<button class="timer-btn timer-btn-done" onclick="handleTimerComplete()">Mark as Complete \u2713</button>';
+    h += '<button class="timer-btn timer-btn-cancel" onclick="handleTimerCloseNoMark()">Close Without Marking</button>';
+  } else {
+    h += '<div class="timer-controls">';
+    h += '<button class="timer-btn timer-btn-primary" onclick="handleTimerPause()">'+(timerPaused?'\u25b6 Resume':'\u23f8 Pause')+'</button>';
+    h += '<button class="timer-btn timer-btn-secondary" onclick="handleTimerCancel()">Cancel</button>';
+    h += '</div>';
+  }
+  h += '</div>';
+  c.innerHTML = h;
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(function(){
+    if(timerPaused) return;
+    timerSecondsLeft--;
+    updateTimerDisplay();
+    // Mid-session Torso Front alert at 6 min elapsed (240s remaining)
+    if(timerZoneId==='torso-front' && timerSecondsLeft===240 && !torsoShiftConfirmed){
+      timerPaused = true;
+      playShiftAlert();
+      if(navigator.vibrate) navigator.vibrate([200,100,200,100,200]);
+      showOverlay('midshift-modal');
+      return;
+    }
+    if(timerSecondsLeft<=0){clearInterval(timerInterval);timerInterval=null;timerFinished();}
+  },1000);
+}
+
+function updateTimerDisplay() {
+  var t = document.getElementById('timer-time');
+  var p = document.getElementById('timer-progress');
+  if(t) t.textContent = formatTime(timerSecondsLeft);
+  if(p){var circ=2*Math.PI*108;var prog=((timerTotalSeconds-timerSecondsLeft)/timerTotalSeconds)*circ;p.setAttribute('stroke-dashoffset',circ-prog);}
+}
+
+function timerFinished() {
+  playCompletionChime();
+  renderTimerScreen(ZONES[timerZoneId], timerZoneId, true);
+}
+
+/* ─── Overlay ─── */
+function showOverlay(id) {
+  var el = document.getElementById(id); el.style.display='flex';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('visible')})});
+}
+function hideOverlay(id) {
+  var el = document.getElementById(id); el.classList.remove('visible');
+  setTimeout(function(){el.style.display='none'},300);
+}
+
+/* ─── Audio ─── */
+function playCompletionChime() {
+  try{var ctx=new(window.AudioContext||window.webkitAudioContext)();var now=ctx.currentTime;
+  [[523.25,0,.8],[659.25,.15,1],[783.99,.3,1.3]].forEach(function(n){
+    var o=ctx.createOscillator();var g=ctx.createGain();o.type='sine';o.frequency.value=n[0];
+    g.gain.setValueAtTime(.001,now+n[1]);g.gain.linearRampToValueAtTime(.25,now+n[1]+.05);
+    g.gain.exponentialRampToValueAtTime(.001,now+n[2]);o.connect(g);g.connect(ctx.destination);
+    o.start(now+n[1]);o.stop(now+n[2]+.05);});
+  setTimeout(function(){try{var c2=new(window.AudioContext||window.webkitAudioContext)();var n2=c2.currentTime;
+  [[523.25,0,.8],[659.25,.15,1],[783.99,.3,1.3]].forEach(function(n){
+    var o=c2.createOscillator();var g=c2.createGain();o.type='sine';o.frequency.value=n[0];
+    g.gain.setValueAtTime(.001,n2+n[1]);g.gain.linearRampToValueAtTime(.18,n2+n[1]+.05);
+    g.gain.exponentialRampToValueAtTime(.001,n2+n[2]);o.connect(g);g.connect(c2.destination);
+    o.start(n2+n[1]);o.stop(n2+n[2]+.05);});}catch(e){}},1400);
+  }catch(e){}
+}
+function playShiftAlert() {
+  try{var ctx=new(window.AudioContext||window.webkitAudioContext)();var now=ctx.currentTime;
+  [0,.3,.6].forEach(function(off){
+    var o=ctx.createOscillator();var g=ctx.createGain();o.type='triangle';o.frequency.value=880;
+    g.gain.setValueAtTime(.3,now+off);g.gain.exponentialRampToValueAtTime(.01,now+off+.15);
+    o.connect(g);g.connect(ctx.destination);o.start(now+off);o.stop(now+off+.2);
+  });}catch(e){}
+}
+
+/* ─── Wake Lock ─── */
+function requestWakeLock(){try{if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(function(w){wakeLock=w}).catch(function(){})}catch(e){}}
+function releaseWakeLock(){if(wakeLock){wakeLock.release().catch(function(){});wakeLock=null}}
+
+/* ─── Utilities ─── */
+function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function formatDateNice(d){return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()}
+function formatDateShort(d){return(d.getMonth()+1)+'/'+d.getDate()}
+
+/* ─── Init ─── */
+function initApp() {
+  if (!hasLaunched()) {
+    var tm = new Date(); tm.setDate(tm.getDate()+1);
+    setCycleStart(dateToKey(tm));
+    var s = getSessionData(); var tk = todayKey();
+    if(!s[tk]) s[tk]={};
+    s[tk]['glutes-thighs']=true; s[tk]['right-tricep']=true; s[tk]['torso-front']=true;
+    saveSessionData(s);
+  }
+  var now = new Date(); var info = getCycleDayForDate(todayKey());
+  var sub = DAY_NAMES[now.getDay()]+', '+formatDateNice(now);
+  if(!info.isPreCycle) sub += ' \u00b7 Cycle Day '+info.cycleDay+' of 7';
+  document.getElementById('header-date').textContent = sub;
+
+  if(!hasLaunched()){
+    document.getElementById('first-launch').style.display='flex';
+    requestAnimationFrame(function(){requestAnimationFrame(function(){document.getElementById('first-launch').classList.add('visible')})});
+  } else {
+    document.getElementById('first-launch').style.display='none';
+    showMainApp();
+  }
+  document.querySelectorAll('.nav-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){switchTab(tab.dataset.tab)});
+  });
+}
+function showMainApp() {
+  var app = document.getElementById('main-app');
+  app.style.display='flex';app.style.flexDirection='column';app.style.height='100%';
+  renderToday();
+}
+document.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>
