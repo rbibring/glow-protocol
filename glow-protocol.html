@@ -77,7 +77,7 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   color:var(--text-light);font-size:10px;cursor:pointer;
   transition:color .2s ease;gap:3px;
 }
-.nav-tab .nav-icon{font-size:22px;transition:transform .2s ease}
+.nav-tab .nav-icon{font-size:20px;transition:transform .2s ease}
 .nav-tab.active{color:var(--mauve)}
 .nav-tab.active .nav-icon{transform:scale(1.1)}
 
@@ -329,6 +329,87 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
 .history-zones{display:flex;flex-wrap:wrap;gap:6px}
 .history-zone-tag{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:8px;background:var(--gold-soft);font-size:12px;color:var(--mauve-deep)}
 
+/* Edit Zones */
+#edit-zones-modal .overlay-content{max-width:420px;padding:28px 20px;text-align:left}
+.edit-zones-title{font-family:Georgia,serif;font-size:20px;color:var(--mauve-deep);margin-bottom:4px;text-align:center}
+.edit-zones-subtitle{font-size:13px;color:var(--text-light);margin-bottom:16px;text-align:center}
+.edit-zones-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;justify-content:center}
+.edit-zone-chip{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;border-radius:12px;
+  border:2px solid var(--cream-dark);background:var(--cream);
+  font-size:14px;color:var(--text);cursor:pointer;
+  transition:all .2s ease;user-select:none;
+}
+.edit-zone-chip.selected{
+  border-color:var(--mauve);background:linear-gradient(135deg,rgba(139,90,123,0.1),rgba(232,160,180,0.1));
+  color:var(--mauve-deep);font-weight:600;
+}
+.edit-zone-chip .chip-mark{display:none;font-size:12px}
+.edit-zone-chip.selected .chip-mark{display:inline;color:var(--mauve)}
+.edit-zones-actions{display:flex;gap:10px;margin-top:4px}
+.edit-zones-actions .btn-primary{flex:1;padding:14px 20px;font-size:15px}
+.edit-zones-reset{
+  background:none;border:1px solid var(--cream-dark);border-radius:16px;
+  padding:14px;font-size:14px;color:var(--text-light);cursor:pointer;flex:0 0 auto;
+  transition:all .15s ease;
+}
+.edit-zones-reset:active{background:var(--cream-dark)}
+.edit-today-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  background:none;border:1px solid var(--mauve-light);border-radius:10px;
+  padding:6px 12px;font-size:12px;color:var(--mauve);cursor:pointer;
+  margin-top:8px;transition:all .15s ease;
+}
+.edit-today-btn:active{background:rgba(139,90,123,0.08)}
+
+/* Progress Screen */
+.progress-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;
+}
+.progress-stat{
+  background:var(--white);border-radius:16px;padding:14px 10px;text-align:center;
+  box-shadow:var(--card-shadow);border:1px solid rgba(200,180,190,0.12);
+}
+.progress-stat .stat-value{font-size:22px;font-weight:800;color:var(--mauve-deep)}
+.progress-stat .stat-label{font-size:10px;color:var(--text-light);margin-top:2px;line-height:1.3}
+
+.progress-zone{
+  background:var(--white);border-radius:20px;padding:20px;margin-bottom:14px;
+  box-shadow:var(--card-shadow);border:1px solid rgba(200,180,190,0.15);
+}
+.progress-zone-header{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.progress-zone-header .pz-emoji{font-size:28px}
+.progress-zone-header .pz-name{font-family:Georgia,serif;font-size:18px;color:var(--mauve-deep);font-weight:600}
+.progress-zone-header .pz-sessions{margin-left:auto;font-size:13px;color:var(--text-light);font-weight:500}
+.progress-zone-meta{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;padding-left:38px}
+.progress-zone-meta .meta-item{font-size:12px;color:var(--text-light)}
+.progress-zone-meta .meta-item strong{color:var(--mauve-deep)}
+
+.milestone{margin-bottom:10px}
+.milestone-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.milestone-name{font-size:12px;color:var(--text);font-weight:500}
+.milestone-pct{font-size:11px;color:var(--text-faint);font-weight:600}
+.milestone-bar{height:8px;background:var(--cream-dark);border-radius:4px;overflow:hidden}
+.milestone-fill{height:100%;border-radius:4px;transition:width .6s ease;background:linear-gradient(90deg,var(--mauve),var(--rose))}
+.milestone-fill.complete{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+.milestone:last-child{margin-bottom:0}
+.milestone-desc{font-size:10px;color:var(--text-faint);margin-top:2px;line-height:1.3}
+
+/* Distance Guide */
+.distance-guide{
+  background:linear-gradient(135deg,var(--gold-soft),var(--cream));
+  border-radius:20px;padding:20px;margin-bottom:16px;
+  border:1px solid var(--gold-light);
+}
+.distance-guide h3{font-family:Georgia,serif;font-size:16px;color:var(--mauve-deep);margin-bottom:12px;text-align:center}
+.distance-table{width:100%;font-size:12px;border-collapse:collapse}
+.distance-table th{text-align:left;padding:6px 8px;color:var(--mauve-deep);font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--gold-light)}
+.distance-table td{padding:6px 8px;color:var(--text);border-bottom:1px solid rgba(200,180,190,0.1)}
+.distance-table td:first-child{font-weight:600}
+.distance-note{font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.5;font-style:italic}
+.distance-warn{font-size:11px;color:var(--danger);margin-top:8px;line-height:1.5;font-weight:500}
+
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .zone-card{animation:fadeIn .35s ease both}
 .zone-card:nth-child(2){animation-delay:.07s}
@@ -337,7 +418,6 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
 .screen::-webkit-scrollbar{width:0;display:none}
 .screen{scrollbar-width:none}
 
-/* Desktop: 3-column zone grid */
 @media(min-width:768px){
   .screen{max-width:1080px;margin:0 auto;padding-left:24px;padding-right:24px}
   header{max-width:1080px;margin:0 auto;width:100%}
@@ -350,8 +430,9 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   .all-done{max-width:600px;margin:16px auto 0}
   .precycle-banner{max-width:600px;margin:0 auto 16px}
   .day-header{max-width:600px;margin-left:auto;margin-right:auto;margin-bottom:16px}
+  .progress-summary{max-width:600px;margin-left:auto;margin-right:auto;margin-bottom:16px}
+  .progress-zone{max-width:600px;margin-left:auto;margin-right:auto}
 }
-/* Tablet: 2 columns if too narrow for 3 */
 @media(min-width:768px) and (max-width:1023px){
   .zones-grid{grid-template-columns:repeat(2,1fr)}
 }
@@ -363,7 +444,7 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   <div class="overlay-content" style="max-width:400px">
     <span class="warn-icon" style="font-size:48px;margin-bottom:12px;display:block">⚠️</span>
     <h2 style="font-family:Georgia,serif;font-size:24px;color:var(--mauve-deep);margin-bottom:16px">Important Safety Notice</h2>
-    <p style="font-size:15px;line-height:1.6;color:var(--text);margin-bottom:20px">This panel outputs <strong>160 mW/cm² at 6 inches</strong> — one of the most powerful consumer red light devices available. Always follow the recommended distance for each zone. <strong>Closer or longer does NOT mean better — it can reverse your results.</strong> These protocols are science-based and designed for your safety and maximum benefit.</p>
+    <p style="font-size:15px;line-height:1.6;color:var(--text);margin-bottom:20px">This panel outputs <strong>127–160 mW/cm² at 6 inches</strong> — one of the most powerful consumer red light devices available. Facial skin only needs 20–50 mW/cm². Always follow the recommended distance for each zone. <strong>Closer or longer does NOT mean better — it can reverse your results (biphasic dose response).</strong> These protocols are based on PlatinumLED BioMax 450 manufacturer guidelines and published research.</p>
     <button class="btn-primary" onclick="handleFirstLaunch()">I Understand — Let's Begin</button>
   </div>
 </div>
@@ -387,6 +468,18 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   </div>
 </div>
 
+<div id="edit-zones-modal" class="overlay">
+  <div class="overlay-content">
+    <div class="edit-zones-title">Edit Today's Zones</div>
+    <div class="edit-zones-subtitle" id="edit-zones-date"></div>
+    <div class="edit-zones-grid" id="edit-zones-grid"></div>
+    <div class="edit-zones-actions">
+      <button class="edit-zones-reset" onclick="handleEditZonesReset()">Reset</button>
+      <button class="btn-primary" onclick="handleEditZonesSave()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <div id="main-app" style="display:none">
   <header>
     <h1>Glow Protocol ✨</h1>
@@ -395,11 +488,13 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   <div id="screen-today" class="screen active"></div>
   <div id="screen-reference" class="screen"></div>
   <div id="screen-weekly" class="screen"></div>
+  <div id="screen-progress" class="screen"></div>
   <div id="screen-history" class="screen"></div>
   <nav id="bottom-nav">
     <button class="nav-tab active" data-tab="today"><span class="nav-icon">🏠</span>Today</button>
-    <button class="nav-tab" data-tab="reference"><span class="nav-icon">📋</span>Reference</button>
+    <button class="nav-tab" data-tab="reference"><span class="nav-icon">📋</span>Guide</button>
     <button class="nav-tab" data-tab="weekly"><span class="nav-icon">📊</span>Weekly</button>
+    <button class="nav-tab" data-tab="progress"><span class="nav-icon">📈</span>Progress</button>
     <button class="nav-tab" data-tab="history"><span class="nav-icon">📜</span>History</button>
   </nav>
 </div>
@@ -413,52 +508,62 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
 var ZONES = {
   'face': {
     name: 'Face', emoji: '🌸',
-    distance: '16–18 inches', red: 80, nir: 20, blue: 'toggle', duration: 10,
+    distance: '18–24 inches', distanceCm: '45–60 cm', red: 80, nir: 20, blue: 'toggle', duration: 10,
     goals: ['Acne', 'Dark Spots', 'Wrinkles', 'Skin Refresh', 'Skin Tightening', 'Stretch Mark Reduction', 'Collagen Rebuilding'],
-    note: 'Toggle blue ON for acne, OFF for anti-aging. You can do both in the same session. Stay 16\u201318 inches \u2014 this device is powerful and this distance is manufacturer-verified for facial safety.',
+    note: 'Toggle blue ON for acne, OFF for anti-aging. You can do both in the same session. Stay 18\u201324 inches \u2014 the BioMax 450 outputs 127\u2013160 mW/cm\u00b2 at 6\u2033, but facial skin only needs 20\u201350 mW/cm\u00b2. At 18\u201324\u2033 irradiance drops to ~15\u201330 mW/cm\u00b2 which is the safe therapeutic range for face. If you feel heat, move farther back. Always wear goggles or keep eyes closed.',
     hasThyroidWarning: false, isPriority: false, hasBlueToggle: true, isTwoPosition: false
   },
   'full-spine': {
     name: 'Full Spine', emoji: '🦴',
-    distance: '8–12 inches', red: 60, nir: 100, blue: false, duration: 10,
+    distance: '8–14 inches', distanceCm: '20–35 cm', red: 60, nir: 100, blue: false, duration: 15,
     goals: ['Pain Relief', 'Inflammation', 'Nerve Health', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding'],
-    note: 'Stand or sit against the panel. Full spine treated in one pass.',
+    note: 'Deep tissue zone \u2014 8\u201314 inches per manufacturer guidelines. At this distance irradiance is ~60\u2013120 mW/cm\u00b2, optimal for deep tissue penetration. NIR at 100% for maximum deep tissue dose. 15 min delivers ~54\u2013108 J/cm\u00b2 total fluence.',
     hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
   },
   'right-tricep': {
     name: 'Right Tricep', emoji: '💪',
-    distance: '8–12 inches', red: 70, nir: 100, blue: false, duration: 10,
+    distance: '8–14 inches', distanceCm: '20–35 cm', red: 70, nir: 100, blue: false, duration: 15,
     goals: ['Torn Tendon Healing', 'Injury Recovery', 'Skin Tightening', 'Stretch Mark Reduction', 'Collagen Rebuilding'],
-    note: 'Priority zone \u2014 consistency is more important than anything else for tendon healing.',
+    note: 'Priority zone \u2014 8\u201314 inches for deep tissue. At 8\u2033 the irradiance is ~100\u2013130 mW/cm\u00b2, ideal for tendon repair. NIR at 100% for maximum penetration depth (up to 3\u20135 cm into tissue). 15 min for optimal deep tissue healing dose.',
     hasThyroidWarning: false, isPriority: true, hasBlueToggle: false, isTwoPosition: false
   },
   'torso-front': {
     name: 'Torso Front', emoji: '🌿',
-    distance: '8" \u2192 16"', red: 60, nir: 80, blue: false, duration: 10,
+    distance: '8" \u2192 18"', distanceCm: '20 \u2192 45 cm', red: 60, nir: 80, blue: false, duration: 15,
     goals: ['Abdominal Fat Reduction', 'Hormonal Support', 'Circulation', 'Gut Health', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation'],
-    note: '',
+    note: 'Two-position zone. Abdomen at 8\u201314\u2033 (~60\u2013120 mW/cm\u00b2) for deep tissue goals, then shift to 18\u2033+ (~20\u201330 mW/cm\u00b2) for thyroid safety. Thyroid tissue is as sensitive as facial skin.',
     hasThyroidWarning: true, isPriority: false, hasBlueToggle: false, isTwoPosition: true,
-    thyroidWarningText: 'Thyroid-safe settings active. Chest/thyroid must be at 16 inches. Do not increase NIR beyond 80% or move closer than 8 inches for abdomen, 16 inches for thyroid.',
+    thyroidWarningText: 'Thyroid-safe settings active. Chest/thyroid must be at 18+ inches \u2014 sensitive tissue requires lower irradiance like face. Do not increase NIR beyond 80% or move closer than 8 inches for abdomen.',
     positions: [
-      { label: 'Position 1 \u2014 Abdomen & Ovaries', distance: '8 inches', minutes: 'Min 1\u20136' },
-      { label: 'Position 2 \u2014 Chest & Thyroid', distance: '16 inches', minutes: 'Min 7\u201310' }
+      { label: 'Position 1 \u2014 Abdomen & Ovaries', distance: '8\u201314 inches', minutes: 'Min 1\u20138' },
+      { label: 'Position 2 \u2014 Chest & Thyroid', distance: '18 inches', minutes: 'Min 9\u201315' }
     ]
   },
   'legs-below-knee': {
     name: 'Legs Below Knee', emoji: '🦵',
-    distance: '12 inches', red: 80, nir: 60, blue: false, duration: 10,
+    distance: '12–14 inches', distanceCm: '30–35 cm', red: 80, nir: 60, blue: false, duration: 15,
     goals: ['Circulation', 'Dark Spots', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation'],
-    note: 'Keep legs 12 inches from panel.',
+    note: 'Surface + moderate depth zone. 12\u201314 inches gives ~40\u201370 mW/cm\u00b2 \u2014 balances skin treatment with circulation benefits. Higher red % prioritizes collagen in skin layers. 15 min for full dose of ~36\u201363 J/cm\u00b2.',
     hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
   },
   'glutes-thighs': {
     name: 'Glutes & Thighs', emoji: '🍑',
-    distance: '8–12 inches', red: 90, nir: 70, blue: false, duration: 10,
+    distance: '8–14 inches', distanceCm: '20–35 cm', red: 90, nir: 70, blue: false, duration: 15,
     goals: ['Cellulite Reduction', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation', 'Muscle Tone & Recovery'],
-    note: 'Higher red % maximizes collagen for stretch marks and skin tightening. NIR kept at 70% to focus on muscle recovery and collagen \u2014 not fat disruption.',
+    note: 'Deep tissue zone at 8\u201314 inches (~60\u2013120 mW/cm\u00b2). Higher red % maximizes collagen for stretch marks & cellulite. NIR at 70% for muscle recovery. 15 min delivers ~54\u2013108 J/cm\u00b2 total fluence.',
     hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
   }
 };
+
+/* ─── Healing Milestones ─── */
+var MILESTONES = [
+  { name: 'Cellular Response', sessions: 6, desc: 'ATP boost, increased blood flow, initial cellular activation' },
+  { name: 'Inflammation Reduction', sessions: 14, desc: 'Reduced inflammation and swelling, early pain relief' },
+  { name: 'Collagen Activation', sessions: 28, desc: 'New collagen production begins, skin texture improving' },
+  { name: 'Visible Results', sessions: 42, desc: 'Noticeable skin improvements, scar fading, significant pain relief' },
+  { name: 'Deep Healing', sessions: 60, desc: 'Deep tissue repair, substantial aesthetic improvements' },
+  { name: 'Maximum Benefits', sessions: 84, desc: 'Full therapeutic potential — maintain with 2-3x/week' }
+];
 
 /* ─── 7-Day Cycle ─── */
 var CYCLE = {
@@ -482,12 +587,17 @@ var timerBlueOn = false;
 var torsoShiftConfirmed = false;
 var wakeLock = null;
 var pendingCompletionZone = null;
+var editZonesSelected = [];
 
 /* ─── LocalStorage ─── */
 function getSessionData() {
   try { return JSON.parse(localStorage.getItem('glowProtocol_sessions') || '{}'); } catch(e) { return {}; }
 }
 function saveSessionData(d) { localStorage.setItem('glowProtocol_sessions', JSON.stringify(d)); }
+function getOverrides() {
+  try { return JSON.parse(localStorage.getItem('glowProtocol_overrides') || '{}'); } catch(e) { return {}; }
+}
+function saveOverrides(o) { localStorage.setItem('glowProtocol_overrides', JSON.stringify(o)); }
 function todayKey() {
   var d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
@@ -511,6 +621,24 @@ function getCycleStart() { return localStorage.getItem('glowProtocol_cycleStart'
 function setCycleStart(v) { localStorage.setItem('glowProtocol_cycleStart', v); }
 function hasLaunched() { return localStorage.getItem('glowProtocol_v3') === '1'; }
 function setLaunched() { localStorage.setItem('glowProtocol_v3', '1'); }
+
+/* ─── Zone Overrides ─── */
+function getZonesForDate(dateStr) {
+  var overrides = getOverrides();
+  if (overrides[dateStr]) return overrides[dateStr];
+  var info = getCycleDayForDate(dateStr);
+  if (info.isPreCycle) return [];
+  return CYCLE[info.cycleDay] || [];
+}
+function getDefaultZonesForDate(dateStr) {
+  var info = getCycleDayForDate(dateStr);
+  if (info.isPreCycle) return [];
+  return CYCLE[info.cycleDay] || [];
+}
+function hasOverride(dateStr) {
+  var overrides = getOverrides();
+  return !!overrides[dateStr];
+}
 
 /* ─── Cycle Calc ─── */
 function getCycleDayForDate(dateStr) {
@@ -583,6 +711,50 @@ function showCompletionModal(zoneId) {
   showOverlay('completion-modal');
 }
 
+/* ─── Edit Zones ─── */
+function openEditZones() {
+  var tk = todayKey();
+  var currentZones = getZonesForDate(tk);
+  editZonesSelected = currentZones.slice();
+  var now = new Date();
+  document.getElementById('edit-zones-date').textContent = formatDateNice(now) + (hasOverride(tk) ? ' (customized)' : '');
+  renderEditZonesGrid();
+  showOverlay('edit-zones-modal');
+}
+function renderEditZonesGrid() {
+  var grid = document.getElementById('edit-zones-grid');
+  var html = '';
+  Object.keys(ZONES).forEach(function(id) {
+    var z = ZONES[id];
+    var sel = editZonesSelected.indexOf(id) !== -1;
+    html += '<div class="edit-zone-chip' + (sel ? ' selected' : '') + '" onclick="toggleEditZone(\'' + id + '\')">';
+    html += '<span class="chip-mark">✓</span>' + z.emoji + ' ' + z.name + '</div>';
+  });
+  grid.innerHTML = html;
+}
+function toggleEditZone(id) {
+  var idx = editZonesSelected.indexOf(id);
+  if (idx !== -1) editZonesSelected.splice(idx, 1);
+  else editZonesSelected.push(id);
+  renderEditZonesGrid();
+}
+function handleEditZonesSave() {
+  var tk = todayKey();
+  var defaults = getDefaultZonesForDate(tk);
+  var same = defaults.length === editZonesSelected.length && defaults.every(function(z) { return editZonesSelected.indexOf(z) !== -1; });
+  var overrides = getOverrides();
+  if (same) { delete overrides[tk]; }
+  else { overrides[tk] = editZonesSelected.slice(); }
+  saveOverrides(overrides);
+  hideOverlay('edit-zones-modal');
+  renderToday();
+}
+function handleEditZonesReset() {
+  var tk = todayKey();
+  editZonesSelected = getDefaultZonesForDate(tk).slice();
+  renderEditZonesGrid();
+}
+
 /* ─── Navigation ─── */
 function switchTab(t) {
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
@@ -591,6 +763,7 @@ function switchTab(t) {
   document.querySelector('.nav-tab[data-tab="'+t+'"]').classList.add('active');
   if(t==='today')renderToday();else if(t==='reference')renderReference();
   else if(t==='weekly')renderWeekly();else if(t==='history')renderHistory();
+  else if(t==='progress')renderProgress();
 }
 
 /* ─── Render: Today ─── */
@@ -610,16 +783,28 @@ function renderToday() {
     el.innerHTML = html; return;
   }
 
-  var zones = CYCLE[info.cycleDay] || [];
-  if (zones.length === 0) {
+  var zones = getZonesForDate(tk);
+  var isRestDefault = (CYCLE[info.cycleDay] || []).length === 0;
+
+  if (zones.length === 0 && isRestDefault && !hasOverride(tk)) {
     el.innerHTML = '<div class="rest-day"><div class="rest-emoji">🧘‍♀️</div><h2>Rest Day</h2>'+
-      '<p>Cycle Day 7 of 7<br><br>Today is your rest day. This is when your cells repair, collagen forms, and results actually happen. Your body is working \u2014 let it.</p></div>';
+      '<p>Cycle Day 7 of 7<br><br>Today is your rest day. This is when your cells repair, collagen forms, and results actually happen. Your body is working \u2014 let it.</p>'+
+      '<button class="edit-today-btn" onclick="openEditZones()">✏️ Add zones anyway</button></div>';
+    return;
+  }
+
+  if (zones.length === 0 && hasOverride(tk)) {
+    el.innerHTML = '<div class="rest-day"><div class="rest-emoji">🧘‍♀️</div><h2>No Zones Scheduled</h2>'+
+      '<p>You cleared all zones for today.</p>'+
+      '<button class="edit-today-btn" onclick="openEditZones()">✏️ Edit zones</button></div>';
     return;
   }
 
   var allDone = zones.every(function(z){return isZoneDone(tk,z)});
   var html = '<div class="day-header">Cycle Day '+info.cycleDay+' of 7<small>'+
-    DAY_NAMES[now.getDay()]+', '+formatDateNice(now)+' \u00b7 Cycle '+info.cycleNumber+'</small></div>';
+    DAY_NAMES[now.getDay()]+', '+formatDateNice(now)+' \u00b7 Cycle '+info.cycleNumber+
+    (hasOverride(tk) ? ' \u00b7 Customized' : '') + '</small></div>';
+  html += '<div style="text-align:center;margin-bottom:12px"><button class="edit-today-btn" onclick="openEditZones()">✏️ Edit today\'s zones</button></div>';
   html += '<div class="zones-grid">';
   zones.forEach(function(id){ html += buildZoneCard(id, true); });
   html += '</div>';
@@ -653,7 +838,9 @@ function buildZoneCard(zoneId, showCheckoff) {
     });
     h += '<div class="position-alert-note">\u23f0 App will alert you at 6 min to shift position</div></div>';
   } else {
-    h += '<div class="zone-distance"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div></div>';
+    h += '<div class="zone-distance"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div>';
+    if (z.distanceCm) h += '<div class="sublabel">'+z.distanceCm+'</div>';
+    h += '</div>';
   }
 
   h += '<div class="zone-settings">';
@@ -679,10 +866,23 @@ function buildZoneCard(zoneId, showCheckoff) {
   h += '</div>'; return h;
 }
 
-/* ─── Render: Reference ─── */
+/* ─── Render: Reference (with Distance Guide) ─── */
 function renderReference() {
   var el = document.getElementById('screen-reference');
   var html = '<div class="day-header">Quick Reference<small>Tap any zone to start a timer</small></div>';
+
+  html += '<div class="distance-guide">';
+  html += '<h3>📏 Distance & Irradiance Guide</h3>';
+  html += '<p style="font-size:12px;color:var(--text);margin-bottom:10px;line-height:1.5;text-align:center">BioMax 450 outputs <strong>127\u2013160 mW/cm\u00b2 at 6"</strong>. Irradiance drops ~50\u201375% when you double distance. Optimal therapeutic dose is 4\u201350 J/cm\u00b2 per session.</p>';
+  html += '<table class="distance-table"><thead><tr><th>Zone Type</th><th>Distance</th><th>Irradiance</th><th>Time</th></tr></thead><tbody>';
+  html += '<tr><td>Face / Thyroid</td><td>18\u201324"</td><td>15\u201330 mW/cm\u00b2</td><td>5\u201310 min</td></tr>';
+  html += '<tr><td>Body (skin)</td><td>12\u201314"</td><td>40\u201370 mW/cm\u00b2</td><td>10\u201315 min</td></tr>';
+  html += '<tr><td>Deep Tissue</td><td>8\u201314"</td><td>60\u2013120 mW/cm\u00b2</td><td>10\u201315 min</td></tr>';
+  html += '</tbody></table>';
+  html += '<div class="distance-warn">\u26a0\ufe0f Never use a high-power panel closer than 6" for extended periods. Above 200 mW/cm\u00b2 risks thermal injury and the biphasic dose response reverses benefits. More is NOT better.</div>';
+  html += '<div class="distance-note">Based on Hamblin (2017), Huang et al. (2009) biphasic dose response, PlatinumLED BioMax 450 specs, and IEC 62471 photobiological safety standards.</div>';
+  html += '</div>';
+
   Object.keys(ZONES).forEach(function(id){
     var z = ZONES[id];
     html += '<div class="ref-card"><div class="ref-card-header">';
@@ -717,14 +917,15 @@ function renderWeekly() {
   for (var i=0;i<7;i++) {
     var d = new Date(csd.getTime()+i*86400000);
     var ds = dateToKey(d); var ci = getCycleDayForDate(ds);
-    var zones = CYCLE[ci.cycleDay]||[]; var isRest=zones.length===0; var isToday=ds===tk;
+    var zones = getZonesForDate(ds); var isRest=zones.length===0; var isToday=ds===tk;
+    var isOverridden = hasOverride(ds);
     html += '<div class="week-row'+(isToday?' today':'')+(isRest?' rest-row':'')+'">';
-    html += '<div class="week-row-header"><span class="week-day-name">Day '+ci.cycleDay+'<small>'+formatDateShort(d)+'</small></span>';
+    html += '<div class="week-row-header"><span class="week-day-name">Day '+ci.cycleDay+'<small>'+formatDateShort(d)+(isOverridden?' \u2022 Edited':'')+'</small></span>';
     if(isRest){html+='<span class="week-status">Rest</span>';}
     else{var dc=zones.filter(function(z){return isZoneDone(ds,z)}).length;html+='<span class="week-status">'+dc+'/'+zones.length+'</span>';}
     html += '</div>';
     if(isRest){html+='<span class="week-rest-label">\ud83e\uddd8\u200d\u2640\ufe0f Recovery & cellular repair</span>';}
-    else{html+='<div class="week-zones">';zones.forEach(function(zid){var z=ZONES[zid];var dn=isZoneDone(ds,zid);html+='<span class="week-zone-chip'+(dn?' done':'')+'">';if(dn)html+='<span class="chip-check">\u2713</span>';html+=z.emoji+' '+z.name+'</span>';});html+='</div>';}
+    else{html+='<div class="week-zones">';zones.forEach(function(zid){var z=ZONES[zid];if(!z)return;var dn=isZoneDone(ds,zid);html+='<span class="week-zone-chip'+(dn?' done':'')+'">';if(dn)html+='<span class="chip-check">\u2713</span>';html+=z.emoji+' '+z.name+'</span>';});html+='</div>';}
     html += '</div>';
   }
   html += '</div>'; el.innerHTML = html;
@@ -735,7 +936,7 @@ function calculateStreak() {
   var d = new Date(); d.setHours(0,0,0,0);
   while(true) {
     var k = dateToKey(d); var ci = getCycleDayForDate(k);
-    var isRest = !ci.isPreCycle && ci.cycleDay === 7;
+    var isRest = !ci.isPreCycle && ci.cycleDay === 7 && !hasOverride(k);
     var has = false; var dd = sessions[k];
     if(dd){for(var key in dd){if(key!=='face_blue'){var v=dd[key];if(v===true||(v&&v.done)){has=true;break;}}}}
     if(has||(isRest&&streak>0)){streak++;d.setDate(d.getDate()-1);}
@@ -743,6 +944,113 @@ function calculateStreak() {
     else break;
   }
   return streak;
+}
+
+/* ─── Render: Progress ─── */
+function renderProgress() {
+  var el = document.getElementById('screen-progress');
+  var sessions = getSessionData();
+  var dates = Object.keys(sessions).sort();
+
+  if (dates.length === 0) {
+    el.innerHTML = '<div class="history-empty"><span class="emoji">📈</span><p>No sessions yet.<br>Complete your first session to see progress!</p></div>';
+    return;
+  }
+
+  // Calculate per-zone stats
+  var zoneStats = {};
+  Object.keys(ZONES).forEach(function(id) { zoneStats[id] = { count: 0, firstDate: null, lastDate: null }; });
+  var totalSessions = 0;
+  var activeDays = 0;
+
+  dates.forEach(function(ds) {
+    var dd = sessions[ds];
+    var dayHasSession = false;
+    Object.keys(dd).forEach(function(k) {
+      if (k === 'face_blue') return;
+      var v = dd[k];
+      if (v === true || (v && v.done)) {
+        if (zoneStats[k]) {
+          zoneStats[k].count++;
+          if (!zoneStats[k].firstDate) zoneStats[k].firstDate = ds;
+          zoneStats[k].lastDate = ds;
+        }
+        totalSessions++;
+        dayHasSession = true;
+      }
+    });
+    if (dayHasSession) activeDays++;
+  });
+
+  // Days since start
+  var firstDate = dates[0];
+  var daysSinceStart = Math.floor((new Date().getTime() - parseDateKey(firstDate).getTime()) / 86400000);
+  var streak = calculateStreak();
+
+  var html = '<div class="day-header">Your Progress<small>Healing takes consistency — track your journey</small></div>';
+
+  // Summary stats
+  html += '<div class="progress-summary">';
+  html += '<div class="progress-stat"><div class="stat-value">' + daysSinceStart + '</div><div class="stat-label">days since<br>you started</div></div>';
+  html += '<div class="progress-stat"><div class="stat-value">' + activeDays + '</div><div class="stat-label">active<br>days</div></div>';
+  html += '<div class="progress-stat"><div class="stat-value">' + totalSessions + '</div><div class="stat-label">total zone<br>sessions</div></div>';
+  html += '</div>';
+
+  if (streak > 0) {
+    html += '<div class="streak-badge" style="margin-bottom:16px"><div class="streak-num">\ud83d\udd25 ' + streak + '</div><div class="streak-label">day streak — keep it going!</div></div>';
+  }
+
+  // Per-zone progress
+  var sortedZones = Object.keys(zoneStats).filter(function(id) { return zoneStats[id].count > 0; })
+    .sort(function(a, b) { return zoneStats[b].count - zoneStats[a].count; });
+
+  // Also show zones with 0 sessions at the bottom
+  var zeroZones = Object.keys(zoneStats).filter(function(id) { return zoneStats[id].count === 0; });
+
+  sortedZones.concat(zeroZones).forEach(function(id) {
+    var z = ZONES[id];
+    var stats = zoneStats[id];
+    html += '<div class="progress-zone">';
+    html += '<div class="progress-zone-header">';
+    html += '<span class="pz-emoji">' + z.emoji + '</span>';
+    html += '<span class="pz-name">' + z.name + '</span>';
+    html += '<span class="pz-sessions">' + stats.count + ' session' + (stats.count !== 1 ? 's' : '') + '</span>';
+    html += '</div>';
+
+    if (stats.count > 0) {
+      var daysSinceFirst = Math.floor((new Date().getTime() - parseDateKey(stats.firstDate).getTime()) / 86400000);
+      var daysSinceLast = Math.floor((new Date().getTime() - parseDateKey(stats.lastDate).getTime()) / 86400000);
+      html += '<div class="progress-zone-meta">';
+      html += '<span class="meta-item">Started <strong>' + daysSinceFirst + ' days ago</strong></span>';
+      html += '<span class="meta-item">Last: <strong>' + (daysSinceLast === 0 ? 'Today' : daysSinceLast + 'd ago') + '</strong></span>';
+      html += '</div>';
+    } else {
+      html += '<div class="progress-zone-meta"><span class="meta-item">Not started yet</span></div>';
+    }
+
+    // Milestones
+    MILESTONES.forEach(function(m) {
+      var pct = Math.min(100, Math.round((stats.count / m.sessions) * 100));
+      var isComplete = pct >= 100;
+      html += '<div class="milestone">';
+      html += '<div class="milestone-header">';
+      html += '<span class="milestone-name">' + (isComplete ? '✓ ' : '') + m.name + '</span>';
+      html += '<span class="milestone-pct">' + stats.count + '/' + m.sessions + (isComplete ? ' ✨' : '') + '</span>';
+      html += '</div>';
+      html += '<div class="milestone-bar"><div class="milestone-fill' + (isComplete ? ' complete' : '') + '" style="width:' + pct + '%"></div></div>';
+      if (!isComplete && stats.count > 0) {
+        var remaining = m.sessions - stats.count;
+        html += '<div class="milestone-desc">' + remaining + ' more session' + (remaining !== 1 ? 's' : '') + ' to go — ' + m.desc + '</div>';
+      } else if (isComplete) {
+        html += '<div class="milestone-desc" style="color:var(--gold)">' + m.desc + '</div>';
+      }
+      html += '</div>';
+    });
+
+    html += '</div>';
+  });
+
+  el.innerHTML = html;
 }
 
 /* ─── Render: History ─── */
@@ -757,7 +1065,7 @@ function renderHistory() {
     if(zids.length===0)return;
     var d = parseDateKey(ds); var ci = getCycleDayForDate(ds);
     var cl = ci.isPreCycle?'Pre-Cycle':'Day '+ci.cycleDay;
-    html += '<div class="history-day"><div class="history-date">'+DAY_NAMES[d.getDay()]+', '+formatDateNice(d)+' \u00b7 '+cl+'</div>';
+    html += '<div class="history-day"><div class="history-date">'+DAY_NAMES[d.getDay()]+', '+formatDateNice(d)+' \u00b7 '+cl+(hasOverride(ds)?' \u00b7 Edited':'')+'</div>';
     html += '<div class="history-zones">';
     zids.forEach(function(zid){var z=ZONES[zid];if(!z)return;var lbl=z.emoji+' '+z.name;
       if(zid==='face'&&dd.face_blue!==undefined)lbl+=dd.face_blue?' (Blue ON)':' (Blue OFF)';
@@ -771,7 +1079,7 @@ function renderHistory() {
 function openTimer(zoneId) {
   var z = ZONES[zoneId]; if(!z)return;
   timerZoneId = zoneId;
-  timerTotalSeconds = Math.min(z.duration,10)*60;
+  timerTotalSeconds = Math.min(z.duration,15)*60;
   timerSecondsLeft = timerTotalSeconds;
   timerPaused = false; timerBlueOn = false; torsoShiftConfirmed = false;
   renderTimerScreen(z, zoneId, false);
@@ -842,7 +1150,6 @@ function startTimer() {
     if(timerPaused) return;
     timerSecondsLeft--;
     updateTimerDisplay();
-    // Mid-session Torso Front alert at 6 min elapsed (240s remaining)
     if(timerZoneId==='torso-front' && timerSecondsLeft===240 && !torsoShiftConfirmed){
       timerPaused = true;
       playShiftAlert();
