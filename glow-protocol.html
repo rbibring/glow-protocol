@@ -563,6 +563,22 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   font-family:inherit;text-align:center;-webkit-appearance:none;
 }
 .log-session-date:focus{border-color:var(--mauve-light)}
+
+/* Quick Add */
+.quick-add{
+  margin-top:16px;padding:16px;background:var(--white);border-radius:20px;
+  box-shadow:var(--card-shadow);border:1px solid rgba(200,180,190,0.12);
+}
+.quick-add-title{font-size:13px;color:var(--text-light);margin-bottom:10px;text-align:center;font-weight:500}
+.quick-add-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.quick-add-chip{
+  display:flex;align-items:center;gap:5px;
+  padding:8px 14px;border-radius:12px;
+  border:1.5px solid var(--mauve-light);background:var(--cream);
+  font-size:13px;color:var(--mauve-deep);cursor:pointer;
+  transition:all .15s ease;font-weight:500;
+}
+.quick-add-chip:active{transform:scale(0.95);background:linear-gradient(135deg,rgba(139,90,123,0.1),rgba(232,160,180,0.1))}
 </style>
 </head>
 <body>
@@ -986,10 +1002,12 @@ function renderToday() {
   var isRestDefault = (CYCLE[info.cycleDay] || []).length === 0;
 
   if (zones.length === 0 && isRestDefault && !hasOverride(tk)) {
-    el.innerHTML = '<div class="rest-day"><div class="rest-emoji">🧘‍♀️</div><h2>Rest Day</h2>'+
+    var restHtml = '<div class="rest-day"><div class="rest-emoji">🧘‍♀️</div><h2>Rest Day</h2>'+
       '<p>Cycle Day 7 of 7<br><br>Today is your rest day. This is when your cells repair, collagen forms, and results actually happen. Your body is working \u2014 let it.</p>'+
       '<p style="font-size:13px;color:var(--text-faint);margin-top:12px;max-width:320px">PlatinumLED recommends 3\u20135 sessions per week. Taking extra rest days is fine and even encouraged.</p>'+
-      '<button class="edit-today-btn" onclick="openEditZones()">✏️ Add zones anyway</button></div>';
+      '<button class="edit-today-btn" onclick="openEditZones()">✏️ Edit schedule</button></div>';
+    restHtml += buildQuickAdd(tk, []);
+    el.innerHTML = restHtml;
     return;
   }
 
@@ -1012,7 +1030,38 @@ function renderToday() {
     html += '<div class="all-done"><div class="emoji">🌟</div><h3>All zones complete!</h3>'+
       '<p>Beautiful work today. Let your body absorb the light.</p></div>';
   }
+  html += buildQuickAdd(tk, zones);
   el.innerHTML = html;
+}
+
+function buildQuickAdd(dateStr, scheduledZones) {
+  var allIds = Object.keys(ZONES);
+  var extras = allIds.filter(function(id) {
+    return scheduledZones.indexOf(id) === -1 && !isZoneDone(dateStr, id);
+  });
+  // Also show zones already done today that weren't scheduled (logged via quick add)
+  var sessions = getSessionData(); var td = sessions[dateStr] || {};
+  var extraDone = Object.keys(td).filter(function(k) {
+    return k !== 'face_blue' && scheduledZones.indexOf(k) === -1 && ZONES[k] && (td[k] === true || (td[k] && td[k].done));
+  });
+  if (extras.length === 0 && extraDone.length === 0) return '';
+  var h = '<div class="quick-add"><div class="quick-add-title">+ Quick add another zone</div>';
+  h += '<div class="quick-add-chips">';
+  extraDone.forEach(function(id) {
+    var z = ZONES[id];
+    h += '<div class="quick-add-chip" style="opacity:0.5;border-color:var(--gold);pointer-events:none">' + z.emoji + ' ' + z.name + ' ✓</div>';
+  });
+  extras.forEach(function(id) {
+    var z = ZONES[id];
+    h += '<div class="quick-add-chip" onclick="quickAddZone(\'' + id + '\')">' + z.emoji + ' ' + z.name + '</div>';
+  });
+  h += '</div></div>';
+  return h;
+}
+
+function quickAddZone(zoneId) {
+  markZoneDone(zoneId);
+  renderToday();
 }
 
 function buildZoneCard(zoneId, showCheckoff) {
