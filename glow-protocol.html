@@ -686,12 +686,12 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
 var ZONES = {
   'face': {
     name: 'Face', emoji: '🌸',
-    distance: '12–18 inches', distanceCm: '30–45 cm', red: 80, nir: 0, blue: 'toggle', duration: 15,
+    distance: '12–18 inches', distanceCm: '30–45 cm', red: 80, nir: 20, blue: 'toggle', duration: 15,
     goals: ['Acne', 'Dark Spots', 'Wrinkles', 'Skin Refresh', 'Skin Tightening', 'Stretch Mark Reduction', 'Collagen Rebuilding'],
-    note: 'Blue ON for acne, OFF for anti-aging, or use Split mode (blue ON first 8 min, auto-OFF last 7 min for collagen). NIR is OFF \u2014 manufacturer warns NIR can worsen hyperpigmentation/dark spots. Start at 18\u2033 and work closer as tolerance builds (per manufacturer). Always wear goggles or keep eyes closed.',
+    note: 'Blue ON for acne, OFF for anti-aging, or Split mode (blue ON first 8 min, auto-OFF last 7 for collagen). NIR at 20% \u2014 low dose for collagen benefit while being cautious with PIH (post-acne & post-Fraxel dark spots). Monitor spots weekly: if any darken, drop NIR to 0%. Start at 18\u2033 and work closer as tolerance builds. Always wear goggles or keep eyes closed.',
     hasThyroidWarning: false, isPriority: false, hasBlueToggle: true, isTwoPosition: false,
     hasHyperpigWarning: true,
-    hyperpigWarningText: 'NIR off \u2014 PlatinumLED warns NIR may aggravate hyperpigmentation. Red light only for dark spot areas.'
+    hyperpigWarningText: 'NIR at 20% (cautious) \u2014 monitor dark spots weekly. If any spot darkens, switch NIR to 0%. Fair skin PIH typically fades well with red light.'
   },
   'full-spine': {
     name: 'Full Spine', emoji: '🦴',
