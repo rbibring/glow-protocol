@@ -579,6 +579,83 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   transition:all .15s ease;font-weight:500;
 }
 .quick-add-chip:active{transform:scale(0.95);background:linear-gradient(135deg,rgba(139,90,123,0.1),rgba(232,160,180,0.1))}
+
+/* Weekly Summary */
+.weekly-summary{
+  margin-top:16px;padding:16px;background:var(--white);border-radius:20px;
+  box-shadow:var(--card-shadow);border:1px solid rgba(200,180,190,0.12);
+}
+.weekly-summary-title{font-size:13px;color:var(--text-light);margin-bottom:12px;text-align:center;font-weight:500}
+.weekly-summary-grid{display:flex;flex-direction:column;gap:6px}
+.weekly-summary-row{
+  display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;
+  background:var(--cream);font-size:13px;color:var(--text);
+}
+.weekly-summary-row .ws-emoji{font-size:16px;width:24px;text-align:center;flex-shrink:0}
+.weekly-summary-row .ws-name{flex:1;font-weight:500;color:var(--mauve-deep)}
+.weekly-summary-row .ws-dots{display:flex;gap:4px;align-items:center}
+.weekly-summary-row .ws-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--mauve-light);opacity:0.25;
+}
+.weekly-summary-row .ws-dot.filled{opacity:1;background:linear-gradient(135deg,var(--mauve),var(--rose))}
+.weekly-summary-row .ws-count{font-size:12px;color:var(--text-light);min-width:20px;text-align:right}
+
+/* Patch Protocol */
+.patch-banner{
+  margin-bottom:14px;padding:14px 16px;border-radius:16px;
+  background:linear-gradient(135deg,#F3E8FF,#EDE4F5);
+  border:1.5px solid #D4B8E8;
+  display:flex;align-items:center;gap:12px;
+}
+.patch-banner .patch-icon{font-size:22px;flex-shrink:0}
+.patch-banner .patch-info{flex:1}
+.patch-banner .patch-label{font-size:13px;font-weight:600;color:var(--mauve-deep);line-height:1.3}
+.patch-banner .patch-sub{font-size:11px;color:var(--text-light);margin-top:2px;line-height:1.3}
+.patch-banner .patch-action{
+  background:var(--white);border:1.5px solid var(--mauve-light);border-radius:10px;
+  padding:6px 12px;font-size:11px;font-weight:600;color:var(--mauve);cursor:pointer;
+  white-space:nowrap;transition:all .15s ease;
+}
+.patch-banner .patch-action:active{background:var(--cream)}
+.patch-setup-link{
+  display:block;text-align:center;font-size:12px;color:var(--text-faint);
+  margin-bottom:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+}
+.patch-setup-link:active{color:var(--mauve)}
+#patch-modal .overlay-content{max-width:380px;padding:28px 24px}
+.patch-option{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:14px;margin-bottom:8px;
+  border:2px solid var(--cream-dark);background:var(--cream);
+  cursor:pointer;transition:all .2s ease;
+}
+.patch-option:active{transform:scale(0.98)}
+.patch-option.selected{border-color:var(--mauve);background:linear-gradient(135deg,rgba(139,90,123,0.08),rgba(232,160,180,0.08))}
+.patch-option .po-emoji{font-size:24px}
+.patch-option .po-text{flex:1}
+.patch-option .po-label{font-size:14px;font-weight:600;color:var(--mauve-deep)}
+.patch-option .po-desc{font-size:11px;color:var(--text-light);margin-top:1px}
+.patch-option .po-check{font-size:16px;color:var(--mauve);opacity:0}
+.patch-option.selected .po-check{opacity:1}
+
+.zone-card.paused{opacity:0.45;filter:grayscale(0.4)}
+.zone-card.paused .zone-paused-label{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 12px;border-radius:10px;margin-bottom:10px;
+  background:#F3E8FF;border:1px solid #D4B8E8;
+  font-size:12px;color:var(--mauve-deep);font-weight:500;
+}
+
+/* Frequency reasoning */
+.freq-reasoning{
+  background:var(--white);border-radius:16px;padding:16px;margin-bottom:14px;
+  box-shadow:var(--card-shadow);border:1px solid rgba(200,180,190,0.12);
+}
+.freq-reasoning h3{font-family:Georgia,serif;font-size:15px;color:var(--mauve-deep);margin-bottom:10px;text-align:center}
+.freq-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--cream-dark)}
+.freq-row:last-child{border-bottom:none}
+.freq-row .fr-zone{font-size:13px;font-weight:600;color:var(--mauve-deep);min-width:80px}
+.freq-row .fr-why{font-size:12px;color:var(--text-light);line-height:1.5}
 </style>
 </head>
 <body>
@@ -587,7 +664,7 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   <div class="overlay-content" style="max-width:400px">
     <span class="warn-icon" style="font-size:48px;margin-bottom:12px;display:block">⚠️</span>
     <h2 style="font-family:Georgia,serif;font-size:24px;color:var(--mauve-deep);margin-bottom:16px">Important Safety Notice</h2>
-    <p style="font-size:15px;line-height:1.6;color:var(--text);margin-bottom:20px">This panel outputs <strong>127–160 mW/cm² at 6 inches</strong> — one of the most powerful consumer red light devices available. Facial skin only needs 20–50 mW/cm². Always follow the recommended distance for each zone. <strong>Closer or longer does NOT mean better — it can reverse your results (biphasic dose response).</strong> These protocols are based on PlatinumLED BioMax 450 manufacturer guidelines and published research.</p>
+    <p style="font-size:15px;line-height:1.6;color:var(--text);margin-bottom:20px">This panel outputs <strong>127\u2013160 mW/cm\u00b2 at 6 inches</strong> \u2014 one of the most powerful consumer red light devices available. Each zone has a specific distance and power level calibrated to deliver the correct therapeutic dose. <strong>Closer or stronger does NOT mean better \u2014 it can reverse your results (biphasic dose response).</strong> These protocols are based on PlatinumLED BioMax 450 specs and published research.</p>
     <button class="btn-primary" onclick="handleFirstLaunch()">I Understand — Let's Begin</button>
   </div>
 </div>
@@ -599,24 +676,6 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
     <p>Confirm you completed this zone today?</p>
     <button class="modal-confirm-btn" onclick="handleModalConfirm()">Mark as Complete ✓</button>
     <button class="modal-cancel-btn" onclick="handleModalCancel()">Not yet</button>
-  </div>
-</div>
-
-<div id="midshift-modal" class="overlay">
-  <div class="overlay-content" style="max-width:360px;border:2px solid var(--danger)">
-    <div style="font-size:48px;margin-bottom:12px">⚠️</div>
-    <h3 style="font-family:Georgia,serif;font-size:20px;color:var(--danger);margin-bottom:12px">Time to Shift Position</h3>
-    <p style="font-size:15px;color:var(--text);margin-bottom:20px;line-height:1.6">Move back so your <strong>chest and thyroid</strong> are now <strong>16 inches</strong> from the panel.<br><br>Same settings — the distance automatically protects your thyroid. Do not move closer.</p>
-    <button class="btn-primary btn-danger" onclick="handleMidShiftConfirm()">I've Shifted — Continue Timer</button>
-  </div>
-</div>
-
-<div id="blueshift-modal" class="overlay" style="z-index:1100">
-  <div class="overlay-content" style="max-width:360px;border:2px solid #3498DB">
-    <div style="font-size:48px;margin-bottom:12px">💙➡️✨</div>
-    <h3 style="font-family:Georgia,serif;font-size:20px;color:var(--mauve-deep);margin-bottom:12px">Blue Light Off — Collagen Mode</h3>
-    <p style="font-size:15px;color:var(--text);margin-bottom:20px;line-height:1.6">Acne phase complete! Blue light is now <strong>OFF</strong> for the remaining time. Pure red + NIR for maximum collagen and anti-aging benefit.</p>
-    <button class="btn-primary" onclick="handleBlueShiftConfirm()">Got It — Continue</button>
   </div>
 </div>
 
@@ -664,6 +723,41 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
   </div>
 </div>
 
+<div id="patch-modal" class="overlay">
+  <div class="overlay-content">
+    <div style="font-size:36px;margin-bottom:12px">💊</div>
+    <div class="edit-zones-title">Estradiol Patch</div>
+    <div class="edit-zones-subtitle" style="margin-bottom:16px">Where is your new patch placed?</div>
+    <div id="patch-options">
+      <div class="patch-option" id="patch-opt-belly" onclick="selectPatchOption('belly')">
+        <span class="po-emoji">🫀</span>
+        <div class="po-text">
+          <div class="po-label">Lower Belly</div>
+          <div class="po-desc">Pauses abdomen/ovaries sessions for 4 days</div>
+        </div>
+        <span class="po-check">✓</span>
+      </div>
+      <div class="patch-option" id="patch-opt-back" onclick="selectPatchOption('back')">
+        <span class="po-emoji">🦴</span>
+        <div class="po-text">
+          <div class="po-label">Lower Back</div>
+          <div class="po-desc">Pauses spine+tricep sessions for 4 days</div>
+        </div>
+        <span class="po-check">✓</span>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div style="font-size:12px;color:var(--text-light);margin-bottom:6px;text-align:center;font-weight:500">When did you place it?</div>
+      <input type="date" id="patch-date-input" class="log-session-date" style="margin-bottom:0">
+    </div>
+    <div class="edit-zones-actions" style="margin-top:16px">
+      <button class="edit-zones-reset" onclick="hideOverlay('patch-modal')">Cancel</button>
+      <button class="btn-primary" onclick="savePatchChange()">Save</button>
+    </div>
+    <button style="background:none;border:none;color:var(--text-faint);font-size:11px;cursor:pointer;padding:8px;margin-top:8px;text-decoration:underline;text-underline-offset:3px;width:100%" onclick="clearPatchData()">Stop tracking patch</button>
+  </div>
+</div>
+
 <button id="chat-fab" onclick="openChat()" style="display:none" title="Ask Claude">💬</button>
 
 <div id="chat-overlay">
@@ -685,55 +779,52 @@ header .subtitle{font-size:13px;color:var(--text-light);margin-top:2px;letter-sp
 /* ─── Zone Data ─── */
 var ZONES = {
   'face': {
-    name: 'Face', emoji: '🌸',
-    distance: '12–18 inches', distanceCm: '30–45 cm', red: 80, nir: 20, blue: 'toggle', duration: 15,
-    goals: ['Acne', 'Dark Spots', 'Wrinkles', 'Skin Refresh', 'Skin Tightening', 'Stretch Mark Reduction', 'Collagen Rebuilding'],
-    note: 'Blue ON for acne, OFF for anti-aging, or Split mode (blue ON first 8 min, auto-OFF last 7 for collagen). NIR at 20% \u2014 low dose for collagen benefit while being cautious with PIH (post-acne & post-Fraxel dark spots). Monitor spots weekly: if any darken, drop NIR to 0%. Start at 18\u2033 and work closer as tolerance builds. Always wear goggles or keep eyes closed.',
-    hasThyroidWarning: false, isPriority: false, hasBlueToggle: true, isTwoPosition: false,
-    hasHyperpigWarning: true,
-    hyperpigWarningText: 'NIR at 20% (cautious) \u2014 monitor dark spots weekly. If any spot darkens, switch NIR to 0%. Fair skin PIH typically fades well with red light.'
+    name: 'Face', emoji: '🧖',
+    power: '100%', distance: '12 inches', distanceCm: '30 cm', duration: 10, frequency: 'Daily',
+    modes: ['Red', 'NIR'],
+    goals: ['Collagen', 'Anti-Aging', 'Dark Spots', 'Skin Remodeling'],
+    note: 'At 12 inches, 100% delivers ~40 mW/cm\u00b2 \u2014 the research sweet spot for collagen and anti-aging. Red handles surface remodeling; NIR builds deeper Type I and III collagen. Dark spots are post-inflammatory (not melasma) so NIR is safe and beneficial here. Staying at 12 inches keeps irradiance well under the 100 mW/cm\u00b2 threshold where photoaging risk begins.',
+    warning: 'Goggles on \u2014 NIR is invisible so pupils won\u2019t constrict to protect your eyes.',
+    warningType: 'warn'
   },
-  'full-spine': {
-    name: 'Full Spine', emoji: '🦴',
-    distance: '6–12 inches', distanceCm: '15–30 cm', red: 60, nir: 100, blue: false, duration: 15,
-    goals: ['Pain Relief', 'Inflammation', 'Nerve Health', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding'],
-    note: 'Deep tissue zone \u2014 6\u201312 inches per manufacturer guidelines (start at 12\u2033, work closer as tolerance builds). NIR at 100% for maximum deep tissue dose. Do not exceed 20 min per area.',
-    hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
+  'thyroid': {
+    name: 'Thyroid / Neck', emoji: '🧣',
+    power: '50\u201360%', distance: '6 inches', distanceCm: '15 cm', duration: 10, frequency: '4x / week',
+    modes: ['Red', 'NIR'],
+    goals: ['Thyroid Support', 'Neck Skin', 'Deep Tissue'],
+    note: 'NIR is essential to reach the thyroid gland beneath the skin. 50\u201360% at 6 inches delivers ~80\u201396 mW/cm\u00b2, the correct range for deep tissue. Running 100% at 6 inches would hit 160 mW/cm\u00b2, overshooting the safe threshold. A 16-week clinical study confirmed daily LED use directly over the neck showed no harmful changes to thyroid function or structure. If you are on thyroid medication, inform your doctor \u2014 RLT can improve thyroid function over time and may eventually affect your dosage.'
   },
-  'right-tricep': {
-    name: 'Right Tricep', emoji: '💪',
-    distance: '6–12 inches', distanceCm: '15–30 cm', red: 70, nir: 100, blue: false, duration: 15,
-    goals: ['Torn Tendon Healing', 'Injury Recovery', 'Skin Tightening', 'Stretch Mark Reduction', 'Collagen Rebuilding'],
-    note: 'Priority zone \u2014 6\u201312 inches for deep tissue (start at 12\u2033, work closer). NIR at 100% for maximum tendon penetration. Do not exceed 20 min. Consistency is key for tendon repair.',
-    hasThyroidWarning: false, isPriority: true, hasBlueToggle: false, isTwoPosition: false
+  'abdomen': {
+    name: 'Abdomen / Ovaries', emoji: '🫀',
+    power: '50\u201360%', distance: '6 inches', distanceCm: '15 cm', duration: 10, frequency: '4x / week',
+    modes: ['Red', 'NIR'],
+    goals: ['Hormonal Support', 'Deep Pelvic Organs', 'Circulation', 'Gut Health'],
+    note: 'Deep pelvic organs require NIR (850nm) for penetration \u2014 red alone cannot reach them. At 6 inches, 50\u201360% delivers ~80\u201396 mW/cm\u00b2, which is the target range for deep tissue. Running 100% at 6 inches would hit 160 mW/cm\u00b2, triggering the biphasic dose response where more light reduces rather than increases benefit. Treat this area separately from the thyroid \u2014 the panel cannot optimally cover both at once.'
   },
-  'torso-front': {
-    name: 'Torso Front', emoji: '🌿',
-    distance: '6–12" \u2192 12–18"', distanceCm: '15–30 \u2192 30–45 cm', red: 60, nir: 80, blue: false, duration: 15,
-    goals: ['Abdominal Fat Reduction', 'Hormonal Support', 'Circulation', 'Gut Health', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation'],
-    note: 'Two-position zone. Abdomen at 6\u201312\u2033 for deep tissue (start farther, work closer), then shift to 12\u201318\u2033 for thyroid safety. Thyroid tissue is sensitive \u2014 treat like face distance. Do not exceed 20 min.',
-    hasThyroidWarning: true, isPriority: false, hasBlueToggle: false, isTwoPosition: true,
-    thyroidWarningText: 'Thyroid-safe settings active. Chest/thyroid must be at 12\u201318 inches \u2014 sensitive tissue like face. Do not increase NIR beyond 80% or move closer than 6 inches for abdomen.',
-    positions: [
-      { label: 'Position 1 \u2014 Abdomen & Ovaries', distance: '6\u201312 inches', minutes: 'Min 1\u20138' },
-      { label: 'Position 2 \u2014 Chest & Thyroid', distance: '12\u201318 inches', minutes: 'Min 9\u201315' }
-    ]
-  },
-  'legs-below-knee': {
-    name: 'Legs Below Knee', emoji: '🦵',
-    distance: '12–14 inches', distanceCm: '30–35 cm', red: 80, nir: 30, blue: false, duration: 15,
-    goals: ['Circulation', 'Dark Spots', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation'],
-    note: 'Surface + moderate depth zone. 12\u201314 inches gives ~40\u201370 mW/cm\u00b2. NIR reduced to 30% \u2014 manufacturer warns NIR can aggravate hyperpigmentation. If dark spots are your main goal, try red only (NIR 0%). Start farther and work your way closer as tolerance builds.',
-    hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false,
-    hasHyperpigWarning: true,
-    hyperpigWarningText: 'NIR reduced \u2014 PlatinumLED warns NIR may aggravate dark spots. Switch to red-only if hyperpigmentation is your priority.'
+  'spine-tricep': {
+    name: 'Spine + Right Tricep', emoji: '🦴',
+    power: '100%', distance: '12 inches', distanceCm: '30 cm', duration: 10, frequency: '5x / week',
+    modes: ['Red', 'NIR'],
+    goals: ['Spine Health', 'Nerve Regeneration', 'Tendon Healing', 'Pain Relief'],
+    note: 'The BIOMAX 450 panel covers the full spine in one position, and the right tricep receives its full dose simultaneously since it faces the panel throughout. One session covers both areas. A University of Birmingham study confirmed transcutaneous red light delivery to the spine performs equivalently to a direct implant. Research protocols used ~35 mW/cm\u00b2; at 12 inches and 100% you are at ~40 mW/cm\u00b2, right on target. For the torn tricep, research shows NIR at 3\u201310 J/cm\u00b2 reliably promotes tendon collagen synthesis.',
+    info: 'One position, one session, two areas treated simultaneously. Stand or sit with your back facing the panel for the full 10 minutes.',
+    infoType: 'success'
   },
   'glutes-thighs': {
-    name: 'Glutes & Thighs', emoji: '🍑',
-    distance: '6–12 inches', distanceCm: '15–30 cm', red: 90, nir: 70, blue: false, duration: 15,
-    goals: ['Cellulite Reduction', 'Skin Tightening', 'Stretch Mark Reduction', 'Thin Skin Rebuilding', 'Collagen Stimulation', 'Muscle Tone & Recovery'],
-    note: 'Deep tissue zone \u2014 6\u201312 inches per manufacturer (start at 12\u2033, work closer). Higher red % maximizes collagen for stretch marks & cellulite. NIR at 70% for muscle recovery. Do not exceed 20 min.',
-    hasThyroidWarning: false, isPriority: false, hasBlueToggle: false, isTwoPosition: false
+    name: 'Glutes + Thighs', emoji: '🍑',
+    power: '50\u201360%', distance: '6 inches', distanceCm: '15 cm', duration: 10, frequency: '4x / week',
+    modes: ['Red', 'NIR'],
+    goals: ['Cellulite Reduction', 'Skin Tightening', 'Stretch Marks', 'Muscle Recovery'],
+    note: 'Cellulite sits in the subcutaneous fat layer several millimeters below the skin surface \u2014 NIR is required to reach it. Muscle strength and recovery also require deep NIR penetration. 50\u201360% at 6 inches delivers ~80\u201396 mW/cm\u00b2, the correct deep-tissue range. Red addresses stretch marks and surface skin laxity; NIR handles deeper collagen remodeling and fat metabolism. Treat glutes and thighs as separate areas, each with its own 10-minute block.',
+    info: 'For best muscle results, treat before exercise for performance (ATP boost) or after for recovery (inflammation reduction). Both are valid \u2014 the mechanism differs.',
+    infoType: 'info'
+  },
+  'legs': {
+    name: 'Legs / Calves', emoji: '🦵',
+    power: '100%', distance: '12 inches', distanceCm: '30 cm', duration: 10, frequency: '4x / week',
+    modes: ['Red', 'NIR'],
+    goals: ['Swelling', 'Circulation', 'Stretch Marks', 'Skin Tightening'],
+    note: 'Swelling responds to improved lymphatic circulation and reduced inflammation \u2014 both well-documented effects of red and NIR at moderate irradiance (~40 mW/cm\u00b2 at 12 inches). Stretch marks and skin laxity are surface-level goals that do not require the higher irradiance used for deep tissue. The lower leg has less muscle bulk than the thigh, so tissue is relatively close to the surface. Treat each leg separately for proper panel coverage.'
   }
 };
 
@@ -744,18 +835,19 @@ var MILESTONES = [
   { name: 'Collagen Activation', sessions: 28, desc: 'New collagen production begins, skin texture improving' },
   { name: 'Visible Results', sessions: 42, desc: 'Noticeable skin improvements, scar fading, significant pain relief' },
   { name: 'Deep Healing', sessions: 60, desc: 'Deep tissue repair, substantial aesthetic improvements' },
-  { name: 'Maximum Benefits', sessions: 84, desc: 'Full therapeutic potential — maintain with 2-3x/week' }
+  { name: 'Maximum Benefits', sessions: 84, desc: 'Full therapeutic potential \u2014 maintain with 2-3x/week' }
 ];
 
 /* ─── 7-Day Cycle ─── */
+/* Face: daily (7x), Spine+Tricep: 5x, Thyroid/Abdomen/Glutes/Legs: 4x each */
 var CYCLE = {
-  1: ['face', 'right-tricep', 'full-spine'],
-  2: ['glutes-thighs', 'legs-below-knee', 'torso-front'],
-  3: ['face', 'right-tricep', 'glutes-thighs'],
-  4: ['full-spine', 'legs-below-knee', 'torso-front'],
-  5: ['face', 'right-tricep', 'full-spine'],
-  6: ['glutes-thighs', 'legs-below-knee', 'right-tricep'],
-  7: []
+  1: ['face', 'spine-tricep', 'thyroid', 'abdomen'],
+  2: ['face', 'spine-tricep', 'glutes-thighs', 'legs'],
+  3: ['face', 'spine-tricep', 'thyroid', 'abdomen'],
+  4: ['face', 'spine-tricep', 'glutes-thighs', 'legs'],
+  5: ['face', 'spine-tricep', 'thyroid', 'glutes-thighs'],
+  6: ['face', 'abdomen', 'legs', 'thyroid'],
+  7: ['face', 'abdomen', 'glutes-thighs', 'legs']
 };
 var DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
@@ -765,13 +857,10 @@ var timerSecondsLeft = 0;
 var timerTotalSeconds = 0;
 var timerPaused = false;
 var timerZoneId = null;
-var timerBlueOn = false;
-var timerBlueSplit = false;
-var blueSplitDone = false;
-var torsoShiftConfirmed = false;
 var wakeLock = null;
 var pendingCompletionZone = null;
 var editZonesSelected = [];
+var patchSelection = null; /* temp for modal */
 
 /* ─── LocalStorage ─── */
 function getSessionData() {
@@ -805,6 +894,85 @@ function getCycleStart() { return localStorage.getItem('glowProtocol_cycleStart'
 function setCycleStart(v) { localStorage.setItem('glowProtocol_cycleStart', v); }
 function hasLaunched() { return localStorage.getItem('glowProtocol_v3') === '1'; }
 function setLaunched() { localStorage.setItem('glowProtocol_v3', '1'); }
+
+/* ─── Estradiol Patch Protocol ─── */
+function getPatchData() {
+  try { return JSON.parse(localStorage.getItem('glowProtocol_patch') || 'null'); } catch(e) { return null; }
+}
+function savePatchData(d) { localStorage.setItem('glowProtocol_patch', JSON.stringify(d)); }
+function clearPatchStorage() { localStorage.removeItem('glowProtocol_patch'); }
+
+function getPatchPausedZone() {
+  var patch = getPatchData();
+  if (!patch) return null;
+  var daysAgo = getPatchDaysAgo();
+  var pauseDays = Math.max(0, daysAgo - 1); /* placement night doesn't count */
+  if (pauseDays >= 4) return null; /* pause expired */
+  return patch.location === 'belly' ? 'abdomen' : (patch.location === 'back' ? 'spine-tricep' : null);
+}
+function getPatchDaysAgo() {
+  var patch = getPatchData();
+  if (!patch) return 0;
+  var pd = parseDateKey(patch.date); var today = new Date();
+  pd.setHours(0,0,0,0); today.setHours(0,0,0,0);
+  return Math.round((today.getTime() - pd.getTime()) / 86400000);
+}
+
+function openPatchModal() {
+  patchSelection = null;
+  var patch = getPatchData();
+  if (patch) patchSelection = patch.location;
+  renderPatchOptions();
+  var dateInput = document.getElementById('patch-date-input');
+  dateInput.value = patch ? patch.date : todayKey();
+  dateInput.max = todayKey();
+  showOverlay('patch-modal');
+}
+function selectPatchOption(loc) {
+  patchSelection = loc;
+  renderPatchOptions();
+}
+function renderPatchOptions() {
+  var belly = document.getElementById('patch-opt-belly');
+  var back = document.getElementById('patch-opt-back');
+  belly.classList.toggle('selected', patchSelection === 'belly');
+  back.classList.toggle('selected', patchSelection === 'back');
+}
+function savePatchChange() {
+  if (!patchSelection) return;
+  var dateInput = document.getElementById('patch-date-input');
+  var patchDate = dateInput.value || todayKey();
+  savePatchData({ location: patchSelection, date: patchDate });
+  hideOverlay('patch-modal');
+  renderToday();
+}
+function clearPatchData() {
+  clearPatchStorage();
+  hideOverlay('patch-modal');
+  renderToday();
+}
+
+function buildPatchBanner() {
+  var patch = getPatchData();
+  if (!patch) {
+    return '<div class="patch-setup-link" onclick="openPatchModal()">💊 Track estradiol patch placement</div>';
+  }
+  var daysAgo = getPatchDaysAgo();
+  var pauseDays = Math.max(0, daysAgo - 1); /* placement night doesn't count */
+  var locLabel = patch.location === 'belly' ? 'Lower belly' : 'Lower back';
+  var pausedZone = patch.location === 'belly' ? 'Abdomen' : 'Spine+Tricep';
+  var remaining = Math.max(0, 4 - pauseDays);
+  var sub = remaining > 0
+    ? pausedZone + ' paused \u2014 ' + remaining + ' day' + (remaining !== 1 ? 's' : '') + ' until patch change'
+    : 'Patch change due \u2014 time to switch placement';
+  var h = '<div class="patch-banner' + (remaining === 0 ? '" style="border-color:#F0A830;background:linear-gradient(135deg,#FFF8E1,#FEF3CD)' : '') + '">';
+  h += '<span class="patch-icon">💊</span>';
+  h += '<div class="patch-info"><div class="patch-label">Patch: ' + locLabel + '</div>';
+  h += '<div class="patch-sub">' + sub + '</div></div>';
+  h += '<button class="patch-action" onclick="openPatchModal()">' + (remaining === 0 ? 'Change' : 'Update') + '</button>';
+  h += '</div>';
+  return h;
+}
 
 /* ─── Zone Overrides ─── */
 function getZonesForDate(dateStr) {
@@ -853,22 +1021,8 @@ function handleModalConfirm() {
 function handleModalCancel() {
   pendingCompletionZone = null; hideOverlay('completion-modal');
 }
-function handleMidShiftConfirm() {
-  torsoShiftConfirmed = true;
-  hideOverlay('midshift-modal');
-  timerPaused = false;
-  var z = ZONES[timerZoneId];
-  renderTimerScreen(z, timerZoneId, false);
-  startTimer();
-}
 function handleTimerComplete() {
-  var zoneId = timerZoneId;
-  if (zoneId === 'face') {
-    markZoneDone(zoneId, {done:true});
-    var s = getSessionData();
-    s[todayKey()].face_blue = blueSplitDone ? 'split' : timerBlueOn;
-    saveSessionData(s);
-  } else { markZoneDone(zoneId); }
+  markZoneDone(timerZoneId);
   hideOverlay('timer-overlay'); releaseWakeLock(); renderToday();
 }
 function handleTimerCloseNoMark() { hideOverlay('timer-overlay'); releaseWakeLock(); }
@@ -880,44 +1034,6 @@ function handleTimerPause() {
 function handleTimerCancel() {
   clearInterval(timerInterval); timerInterval = null;
   hideOverlay('timer-overlay'); releaseWakeLock();
-}
-function handleBlueToggle() {
-  timerBlueOn = !timerBlueOn;
-  timerBlueSplit = false;
-  updateBlueUI();
-}
-function handleBlueMode(mode) {
-  if (mode === 'on') { timerBlueOn = true; timerBlueSplit = false; }
-  else if (mode === 'off') { timerBlueOn = false; timerBlueSplit = false; }
-  else if (mode === 'split') { timerBlueOn = true; timerBlueSplit = true; blueSplitDone = false; }
-  updateBlueUI();
-  updateBlueModeButtons();
-}
-function updateBlueUI() {
-  var btn = document.getElementById('blue-toggle-btn');
-  if (btn) btn.classList.toggle('active', timerBlueOn);
-  var lbl = document.getElementById('blue-toggle-label');
-  if (lbl) lbl.textContent = timerBlueSplit ? 'SPLIT' : (timerBlueOn ? 'ON' : 'OFF');
-  var vals = document.querySelectorAll('#timer-container .timer-setting .value');
-  if (vals[2]) vals[2].textContent = timerBlueSplit ? 'SPLIT' : (timerBlueOn ? 'ON' : 'OFF');
-  updateBlueModeButtons();
-}
-function updateBlueModeButtons() {
-  document.querySelectorAll('.blue-mode-btn').forEach(function(b) {
-    var m = b.dataset.mode;
-    var isActive = (m === 'on' && timerBlueOn && !timerBlueSplit) ||
-                   (m === 'off' && !timerBlueOn && !timerBlueSplit) ||
-                   (m === 'split' && timerBlueSplit);
-    b.classList.toggle('active', isActive);
-  });
-  var sl = document.getElementById('split-label');
-  if (sl) sl.style.display = timerBlueSplit ? 'block' : 'none';
-}
-function handleBlueShiftConfirm() {
-  hideOverlay('blueshift-modal');
-  timerPaused = false;
-  renderTimerScreen(ZONES[timerZoneId], timerZoneId, false);
-  startTimer();
 }
 function showCompletionModal(zoneId) {
   pendingCompletionZone = zoneId;
@@ -995,6 +1111,7 @@ function renderToday() {
     html += '<div class="zones-grid">';
     done.forEach(function(id){ if(ZONES[id]) html += buildZoneCard(id,true); });
     html += '</div>';
+    html += buildWeeklySummary();
     el.innerHTML = html; return;
   }
 
@@ -1007,6 +1124,7 @@ function renderToday() {
       '<p style="font-size:13px;color:var(--text-faint);margin-top:12px;max-width:320px">PlatinumLED recommends 3\u20135 sessions per week. Taking extra rest days is fine and even encouraged.</p>'+
       '<button class="edit-today-btn" onclick="openEditZones()">✏️ Edit schedule</button></div>';
     restHtml += buildQuickAdd(tk, []);
+    restHtml += buildWeeklySummary();
     el.innerHTML = restHtml;
     return;
   }
@@ -1018,11 +1136,13 @@ function renderToday() {
     return;
   }
 
-  var allDone = zones.every(function(z){return isZoneDone(tk,z)});
+  var pausedZone = getPatchPausedZone();
+  var allDone = zones.every(function(z){return isZoneDone(tk,z) || z === pausedZone});
   var html = '<div class="day-header">Cycle Day '+info.cycleDay+' of 7<small>'+
     DAY_NAMES[now.getDay()]+', '+formatDateNice(now)+' \u00b7 Cycle '+info.cycleNumber+
     (hasOverride(tk) ? ' \u00b7 Customized' : '') + '</small></div>';
   html += '<div style="text-align:center;margin-bottom:12px"><button class="edit-today-btn" onclick="openEditZones()">✏️ Edit today\'s zones</button></div>';
+  html += buildPatchBanner();
   html += '<div class="zones-grid">';
   zones.forEach(function(id){ html += buildZoneCard(id, true); });
   html += '</div>';
@@ -1031,6 +1151,7 @@ function renderToday() {
       '<p>Beautiful work today. Let your body absorb the light.</p></div>';
   }
   html += buildQuickAdd(tk, zones);
+  html += buildWeeklySummary();
   el.innerHTML = html;
 }
 
@@ -1049,7 +1170,7 @@ function buildQuickAdd(dateStr, scheduledZones) {
   h += '<div class="quick-add-chips">';
   extraDone.forEach(function(id) {
     var z = ZONES[id];
-    h += '<div class="quick-add-chip" style="opacity:0.5;border-color:var(--gold);pointer-events:none">' + z.emoji + ' ' + z.name + ' ✓</div>';
+    h += '<div class="quick-add-chip" style="opacity:0.5;border-color:var(--gold);cursor:pointer" onclick="removeQuickAdd(\'' + id + '\')">' + z.emoji + ' ' + z.name + ' <span style="margin-left:2px;font-size:11px;opacity:0.7">✕</span></div>';
   });
   extras.forEach(function(id) {
     var z = ZONES[id];
@@ -1064,49 +1185,106 @@ function quickAddZone(zoneId) {
   renderToday();
 }
 
+function removeQuickAdd(zoneId) {
+  var s = getSessionData(); var k = todayKey();
+  if (s[k] && s[k][zoneId] !== undefined) {
+    delete s[k][zoneId];
+    saveSessionData(s);
+  }
+  renderToday();
+}
+
+function buildWeeklySummary() {
+  var sessions = getSessionData();
+  var today = new Date();
+  var dayOfWeek = today.getDay(); // 0=Sun
+  var mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  var monday = new Date(today);
+  monday.setDate(today.getDate() + mondayOffset);
+
+  var weekDates = [];
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    weekDates.push(dateToKey(d));
+  }
+
+  var counts = {};
+  var allIds = Object.keys(ZONES);
+  allIds.forEach(function(id) { counts[id] = 0; });
+
+  weekDates.forEach(function(dk) {
+    var dayData = sessions[dk] || {};
+    allIds.forEach(function(id) {
+      var v = dayData[id];
+      if (v === true || (v && typeof v === 'object' && v.done === true)) {
+        counts[id]++;
+      }
+    });
+  });
+
+  var totalSessions = 0;
+  allIds.forEach(function(id) { totalSessions += counts[id]; });
+  if (totalSessions === 0) return '';
+
+  var maxDots = 7;
+  var h = '<div class="weekly-summary"><div class="weekly-summary-title">This week</div>';
+  h += '<div class="weekly-summary-grid">';
+  allIds.forEach(function(id) {
+    var z = ZONES[id];
+    var c = counts[id];
+    h += '<div class="weekly-summary-row">';
+    h += '<span class="ws-emoji">' + z.emoji + '</span>';
+    h += '<span class="ws-name">' + z.name + '</span>';
+    h += '<span class="ws-dots">';
+    for (var i = 0; i < maxDots; i++) {
+      h += '<span class="ws-dot' + (i < c ? ' filled' : '') + '"></span>';
+    }
+    h += '</span>';
+    h += '<span class="ws-count">' + c + 'x</span>';
+    h += '</div>';
+  });
+  h += '</div></div>';
+  return h;
+}
+
 function buildZoneCard(zoneId, showCheckoff) {
   var z = ZONES[zoneId]; if(!z)return '';
   var done = isZoneDone(todayKey(), zoneId);
-  var h = '<div class="zone-card'+(done?' completed':'')+'">';
+  var paused = getPatchPausedZone() === zoneId;
+  var h = '<div class="zone-card'+(done?' completed':'')+(paused?' paused':'')+'">';
+  if (paused) {
+    var patchLoc = getPatchData().location === 'belly' ? 'lower belly' : 'lower back';
+    h += '<div class="zone-paused-label">💊 Paused \u2014 estradiol patch on ' + patchLoc + '</div>';
+  }
   h += '<span class="zone-emoji">'+z.emoji+'</span>';
-  h += '<div class="zone-name">'+z.name;
-  if(z.isPriority) h+='<span class="zone-priority">PRIORITY</span>';
+  h += '<div class="zone-name">'+z.name+'</div>';
+  h += '<div class="zone-goals">'+z.modes.map(function(m){return '<span style="display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;margin-right:4px;'+(m==='Red'?'background:#FAECE7;color:#993C1D':'background:#E6F1FB;color:#185FA5')+'">'+m+'</span>'}).join('')+' &nbsp; '+z.goals.join(' \u00b7 ')+'</div>';
+
+  h += '<div class="zone-distance"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div>';
+  if (z.distanceCm) h += '<div class="sublabel">'+z.distanceCm+'</div>';
   h += '</div>';
-  h += '<div class="zone-goals">'+z.goals.join(' \u00b7 ')+'</div>';
-
-  if (z.hasThyroidWarning) {
-    var wt = z.thyroidWarningText || 'Thyroid-safe settings active.';
-    h += '<div class="thyroid-warning"><span class="warn-icon">⚠️</span><span class="warn-text">'+wt+'</span></div>';
-  }
-  if (z.hasHyperpigWarning) {
-    var hw = z.hyperpigWarningText || 'NIR may aggravate hyperpigmentation.';
-    h += '<div class="hyperpig-warning"><span class="warn-icon">🔆</span><span class="warn-text">'+hw+'</span></div>';
-  }
-
-  if (z.isTwoPosition) {
-    h += '<div class="zone-distance"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div><div class="sublabel">Position change at 6 min</div></div>';
-    h += '<div class="zone-positions">';
-    z.positions.forEach(function(p){
-      h += '<div class="position-block"><strong>'+p.label+' ('+p.minutes+'):</strong> '+p.distance+' from panel</div>';
-    });
-    h += '<div class="position-alert-note">\u23f0 App will alert you at 6 min to shift position</div></div>';
-  } else {
-    h += '<div class="zone-distance"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div>';
-    if (z.distanceCm) h += '<div class="sublabel">'+z.distanceCm+'</div>';
-    h += '</div>';
-  }
 
   h += '<div class="zone-settings">';
-  h += '<div class="zone-setting"><div class="label">Red</div><div class="value">'+z.red+'%</div></div>';
-  h += '<div class="zone-setting"><div class="label">NIR</div><div class="value">'+z.nir+'%</div></div>';
-  if(z.hasBlueToggle) h+='<div class="zone-setting"><div class="label">Blue</div><div class="value blue-toggle">Your Choice</div></div>';
-  else h+='<div class="zone-setting"><div class="label">Blue</div><div class="value blue-off">OFF</div></div>';
+  h += '<div class="zone-setting"><div class="label">Power</div><div class="value">'+z.power+'</div></div>';
+  h += '<div class="zone-setting"><div class="label">Time</div><div class="value">'+z.duration+'m</div></div>';
+  h += '<div class="zone-setting"><div class="label">Frequency</div><div class="value" style="font-size:12px">'+z.frequency+'</div></div>';
   h += '</div>';
 
-  h += '<div class="zone-duration">Duration: <strong>'+z.duration+' min</strong></div>';
+  if (z.warning) {
+    h += '<div class="thyroid-warning" style="border-color:#F0A830;background:#FFF8E1"><span class="warn-icon">\u26a0\ufe0f</span><span class="warn-text" style="color:#8B6914">'+z.warning+'</span></div>';
+  }
+  if (z.info) {
+    var bgC = z.infoType==='success' ? 'background:#E8F5E9;border-color:#66BB6A' : 'background:#E6F1FB;border-color:#90CAF9';
+    var txC = z.infoType==='success' ? 'color:#2E7D32' : 'color:#185FA5';
+    h += '<div style="border:1.5px solid;border-radius:14px;padding:10px 14px;margin-bottom:10px;font-size:13px;line-height:1.5;'+bgC+';'+txC+'">'+z.info+'</div>';
+  }
+
   if(z.note) h += '<div class="zone-safety">'+z.note+'</div>';
 
-  if (showCheckoff) {
+  if (paused) {
+    h += '<button class="checkoff-btn checked" disabled style="opacity:0.4">Paused This Cycle</button>';
+  } else if (showCheckoff) {
     if(done) {
       h += '<button class="checkoff-btn checked" disabled>Completed</button>';
     } else {
@@ -1125,30 +1303,48 @@ function renderReference() {
   var html = '<div class="day-header">Quick Reference<small>Tap any zone to start a timer</small></div>';
 
   html += '<div class="distance-guide">';
-  html += '<h3>📏 Distance & Irradiance Guide</h3>';
+  html += '<h3>\ud83d\udccf Distance & Irradiance Guide</h3>';
   html += '<p style="font-size:12px;color:var(--text);margin-bottom:10px;line-height:1.5;text-align:center">BioMax 450 outputs <strong>127\u2013160 mW/cm\u00b2 at 6"</strong>. Irradiance drops ~50\u201375% when you double distance. Optimal therapeutic dose is 4\u201350 J/cm\u00b2 per session.</p>';
-  html += '<table class="distance-table"><thead><tr><th>Zone Type</th><th>Distance</th><th>Irradiance</th><th>Time</th></tr></thead><tbody>';
-  html += '<tr><td>Face / Thyroid</td><td>12\u201318"</td><td>20\u201350 mW/cm\u00b2</td><td>10\u201315 min</td></tr>';
-  html += '<tr><td>Body (skin)</td><td>12\u201314"</td><td>40\u201370 mW/cm\u00b2</td><td>10\u201315 min</td></tr>';
-  html += '<tr><td>Deep Tissue</td><td>6\u201312"</td><td>60\u2013160 mW/cm\u00b2</td><td>10\u201315 min</td></tr>';
+  html += '<table class="distance-table"><thead><tr><th>Zone Type</th><th>Distance</th><th>Power</th><th>Irradiance</th></tr></thead><tbody>';
+  html += '<tr><td>Surface (face, spine, legs)</td><td>12"</td><td>100%</td><td>~40 mW/cm\u00b2</td></tr>';
+  html += '<tr><td>Deep tissue (thyroid, abdomen, glutes)</td><td>6"</td><td>50\u201360%</td><td>~80\u201396 mW/cm\u00b2</td></tr>';
   html += '</tbody></table>';
-  html += '<div class="distance-warn">\u26a0\ufe0f Never use a high-power panel closer than 6" for extended periods. Above 200 mW/cm\u00b2 risks thermal injury and the biphasic dose response reverses benefits. More is NOT better.</div>';
+  html += '<div class="distance-warn">\u26a0\ufe0f 100% at 6 inches hits 160 mW/cm\u00b2 \u2014 overshooting the safe threshold. More is NOT better (biphasic dose response).</div>';
   html += '<div class="distance-note">Based on Hamblin (2017), Huang et al. (2009) biphasic dose response, PlatinumLED BioMax 450 specs, and IEC 62471 photobiological safety standards.</div>';
+  html += '</div>';
+
+  html += '<div style="font-size:11px;font-weight:500;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;margin:16px 0 8px;text-align:center">How to switch modes on the BIOMAX 450</div>';
+  html += '<div style="background:var(--cream);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--text-light);line-height:1.6;text-align:center">Press <strong style="color:var(--text)">MENU</strong> to highlight the light mode, then press <strong style="color:var(--text)">+</strong> to select or deselect Red and NIR independently.</div>';
+
+  /* Frequency reasoning */
+  html += '<div class="freq-reasoning"><h3>Why These Frequencies?</h3>';
+  html += '<div class="freq-row"><span class="fr-zone">\ud83e\uddd6 Face<br>Daily</span><span class="fr-why">Skin has fast cellular turnover and responds well to daily stimulation. Facial photorejuvenation research consistently supports daily use at moderate irradiance.</span></div>';
+  html += '<div class="freq-row"><span class="fr-zone">\ud83e\uddb4 Spine<br>5x / week</span><span class="fr-why">Nerve regeneration is slow and benefits from high-frequency consistent dosing. The Birmingham spinal cord research used daily treatment; 5x is near-daily with two rest days.</span></div>';
+  html += '<div class="freq-row"><span class="fr-zone">All others<br>4x / week</span><span class="fr-why">Deep tissue, muscle, and organ targets benefit from rest days between sessions. Cells need time to complete the repair and collagen synthesis cycles that RLT triggers. Treating every single day can actually reduce results over time.</span></div>';
+  html += '<div style="font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.5;font-style:italic;border-top:1px solid var(--cream-dark);padding-top:8px">General rule: for surface skin, daily is fine. For deep tissue, organs, tendons, and nerves, consistent near-daily with rest days produces better outcomes.</div>';
+  html += '</div>';
+
+  /* Estradiol patch protocol */
+  html += '<div class="freq-reasoning" style="margin-top:14px"><h3>\ud83d\udc8a Estradiol Patch Protocol</h3>';
+  html += '<div style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">At every patch change, note the placement location before starting your session.</div>';
+  html += '<div class="freq-row"><span class="fr-zone">\ud83e\udec0 Patch on belly</span><span class="fr-why">Abdomen / ovaries session is paused for 4 days. All other areas continue as normal. Resume at next patch change when you can reposition.</span></div>';
+  html += '<div class="freq-row"><span class="fr-zone">\ud83e\uddb4 Patch on back</span><span class="fr-why">Spine + tricep session is paused for 4 days. All other areas including abdomen continue as normal. Resume at next patch change.</span></div>';
+  html += '<div style="font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.5;font-style:italic;border-top:1px solid var(--cream-dark);padding-top:8px">Alternate placement at each change \u2014 belly, then back, then belly. This way neither area loses more than 4 days in a row, and both get close to their intended weekly frequency over time.</div>';
   html += '</div>';
 
   Object.keys(ZONES).forEach(function(id){
     var z = ZONES[id];
     html += '<div class="ref-card"><div class="ref-card-header">';
     html += '<span class="emoji">'+z.emoji+'</span><span class="name">'+z.name+'</span>';
-    if(z.isPriority) html+='<span class="priority">PRIORITY</span>';
+    z.modes.forEach(function(m){
+      html += '<span style="font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;margin-left:4px;'+(m==='Red'?'background:#FAECE7;color:#993C1D':'background:#E6F1FB;color:#185FA5')+'">'+m+'</span>';
+    });
     html += '</div>';
-    if(z.hasThyroidWarning) html+='<div class="thyroid-warning" style="margin-bottom:8px;padding:8px 12px"><span class="warn-icon">⚠️</span><span class="warn-text" style="font-size:12px">Thyroid-safe \u2014 NIR \u2264 80%, min 16\u2033 for thyroid</span></div>';
     html += '<div class="ref-settings">';
     html += '<span class="ref-pill">\ud83d\udccf <strong>'+z.distance+'</strong></span>';
-    html += '<span class="ref-pill">\ud83d\udd34 Red <strong>'+z.red+'%</strong></span>';
-    html += '<span class="ref-pill">\ud83d\udfe4 NIR <strong>'+z.nir+'%</strong></span>';
-    html += z.hasBlueToggle ? '<span class="ref-pill">\ud83d\udd35 Blue <strong>Your Choice</strong></span>' : '<span class="ref-pill">\u26aa Blue <strong>OFF</strong></span>';
+    html += '<span class="ref-pill">\u26a1 Power <strong>'+z.power+'</strong></span>';
     html += '<span class="ref-pill">\u23f1 <strong>'+z.duration+' min</strong></span>';
+    html += '<span class="ref-pill">\ud83d\udcc5 <strong>'+z.frequency+'</strong></span>';
     html += '</div>';
     html += '<button class="checkoff-btn" onclick="openTimer(\''+id+'\')" style="margin-top:10px;padding:10px;font-size:14px">Start Timer</button>';
     html += '</div>';
@@ -1188,12 +1384,10 @@ function calculateStreak() {
   var sessions = getSessionData(); var streak = 0;
   var d = new Date(); d.setHours(0,0,0,0);
   while(true) {
-    var k = dateToKey(d); var ci = getCycleDayForDate(k);
-    var isRest = !ci.isPreCycle && ci.cycleDay === 7 && !hasOverride(k);
+    var k = dateToKey(d);
     var has = false; var dd = sessions[k];
     if(dd){for(var key in dd){if(key!=='face_blue'){var v=dd[key];if(v===true||(v&&v.done)){has=true;break;}}}}
-    if(has||(isRest&&streak>0)){streak++;d.setDate(d.getDate()-1);}
-    else if(ci.isPreCycle&&has){streak++;d.setDate(d.getDate()-1);}
+    if(has){streak++;d.setDate(d.getDate()-1);}
     else break;
   }
   return streak;
@@ -1323,7 +1517,6 @@ function renderHistory() {
     html += '<div class="history-day"><div class="history-date">'+DAY_NAMES[d.getDay()]+', '+formatDateNice(d)+' \u00b7 '+cl+(hasOverride(ds)?' \u00b7 Edited':'')+'</div>';
     html += '<div class="history-zones">';
     zids.forEach(function(zid){var z=ZONES[zid];if(!z)return;var lbl=z.emoji+' '+z.name;
-      if(zid==='face'&&dd.face_blue!==undefined)lbl+=dd.face_blue==='split'?' (Split)':dd.face_blue?' (Blue ON)':' (Blue OFF)';
       html+='<span class="history-zone-tag">'+lbl+'</span>';});
     html += '</div></div>';
   });
@@ -1334,9 +1527,9 @@ function renderHistory() {
 function openTimer(zoneId) {
   var z = ZONES[zoneId]; if(!z)return;
   timerZoneId = zoneId;
-  timerTotalSeconds = Math.min(z.duration,15)*60;
+  timerTotalSeconds = z.duration*60;
   timerSecondsLeft = timerTotalSeconds;
-  timerPaused = false; timerBlueOn = false; timerBlueSplit = false; blueSplitDone = false; torsoShiftConfirmed = false;
+  timerPaused = false;
   renderTimerScreen(z, zoneId, false);
   showOverlay('timer-overlay');
   requestWakeLock(); startTimer();
@@ -1348,40 +1541,21 @@ function renderTimerScreen(z, zoneId, finished) {
   var prog = finished ? circ : ((timerTotalSeconds-timerSecondsLeft)/timerTotalSeconds)*circ;
   var off = circ - prog;
 
-  var inPos1 = z.isTwoPosition && !torsoShiftConfirmed;
-  var inPos2 = z.isTwoPosition && torsoShiftConfirmed;
-  var curDist = z.distance;
-  var posLabel = '';
-  if(inPos1){curDist=z.positions[0].distance;posLabel=z.positions[0].label;}
-  else if(inPos2){curDist=z.positions[1].distance;posLabel=z.positions[1].label;}
-
   var h = '<div class="timer-header">';
   h += '<span class="timer-zone-emoji">'+z.emoji+'</span>';
   h += '<div class="timer-zone-name">'+z.name+'</div>';
   h += '<div class="timer-settings">';
-  h += '<div class="timer-setting"><div class="label">Red</div><div class="value">'+z.red+'%</div></div>';
-  h += '<div class="timer-setting"><div class="label">NIR</div><div class="value">'+z.nir+'%</div></div>';
-  h += '<div class="timer-setting"><div class="label">Blue</div><div class="value">'+(z.hasBlueToggle?(timerBlueSplit?'SPLIT':(timerBlueOn?'ON':'OFF')):'OFF')+'</div></div>';
+  h += '<div class="timer-setting"><div class="label">Power</div><div class="value">'+z.power+'</div></div>';
+  h += '<div class="timer-setting"><div class="label">Modes</div><div class="value" style="font-size:12px">'+z.modes.join(' + ')+'</div></div>';
+  h += '<div class="timer-setting"><div class="label">Distance</div><div class="value" style="font-size:14px">'+z.distance+'</div></div>';
   h += '<div class="timer-setting"><div class="label">Time</div><div class="value">'+z.duration+'m</div></div>';
   h += '</div>';
 
-  h += '<div class="timer-distance-banner"><div class="label">Distance from Panel</div><div class="value">'+curDist+'</div>';
-  if(posLabel) h+='<div class="sublabel">'+posLabel+'</div>';
+  h += '<div class="timer-distance-banner"><div class="label">Distance from Panel</div><div class="value">'+z.distance+'</div>';
+  if (z.distanceCm) h += '<div class="sublabel">'+z.distanceCm+'</div>';
   h += '</div>';
 
-  if(z.hasBlueToggle && !finished){
-    h += '<div class="blue-toggle-wrap"><span class="blue-toggle-label">Blue Light</span>';
-    h += '<button class="toggle-switch'+(timerBlueOn?' active':'')+'" id="blue-toggle-btn" onclick="handleBlueToggle()"><span class="toggle-knob"></span></button>';
-    h += '<span class="blue-toggle-status" id="blue-toggle-label">'+(timerBlueSplit?'SPLIT':(timerBlueOn?'ON':'OFF'))+'</span></div>';
-    h += '<div class="blue-mode-btns">';
-    h += '<button class="blue-mode-btn'+(!timerBlueOn&&!timerBlueSplit?' active':'')+'" data-mode="off" onclick="handleBlueMode(\'off\')">OFF — Anti-Aging</button>';
-    h += '<button class="blue-mode-btn'+(timerBlueOn&&!timerBlueSplit?' active':'')+'" data-mode="on" onclick="handleBlueMode(\'on\')">ON — Acne</button>';
-    h += '<button class="blue-mode-btn'+(timerBlueSplit?' active':'')+'" data-mode="split" onclick="handleBlueMode(\'split\')">SPLIT — Both</button>';
-    h += '</div>';
-    var splitMin = Math.ceil(z.duration * 0.53);
-    h += '<div class="blue-split-label" id="split-label" style="display:'+(timerBlueSplit?'block':'none')+'">Blue ON for first '+splitMin+' min, then OFF for collagen</div>';
-  }
-  if(z.hasThyroidWarning) h+='<div class="timer-thyroid-warn">\u26a0\ufe0f Thyroid-safe settings \u2014 chest/thyroid at 16\u2033, NIR \u2264 80%</div>';
+  if (z.warning) h+='<div class="timer-thyroid-warn" style="background:rgba(240,168,48,0.9)">\u26a0\ufe0f '+z.warning+'</div>';
   h += '</div>';
 
   h += '<div class="timer-display"><div class="timer-ring">';
@@ -1412,26 +1586,6 @@ function startTimer() {
     if(timerPaused) return;
     timerSecondsLeft--;
     updateTimerDisplay();
-    // Blue split: turn off blue at ~53% through (8 min of 15)
-    if(timerBlueSplit && !blueSplitDone){
-      var splitPoint = Math.round(timerTotalSeconds * 0.47);
-      if(timerSecondsLeft <= splitPoint){
-        blueSplitDone = true;
-        timerBlueOn = false;
-        timerPaused = true;
-        playShiftAlert();
-        if(navigator.vibrate) navigator.vibrate([200,100,200]);
-        showOverlay('blueshift-modal');
-        return;
-      }
-    }
-    if(timerZoneId==='torso-front' && timerSecondsLeft===240 && !torsoShiftConfirmed){
-      timerPaused = true;
-      playShiftAlert();
-      if(navigator.vibrate) navigator.vibrate([200,100,200,100,200]);
-      showOverlay('midshift-modal');
-      return;
-    }
     if(timerSecondsLeft<=0){clearInterval(timerInterval);timerInterval=null;timerFinished();}
   },1000);
 }
@@ -1625,7 +1779,7 @@ function buildChatSystemPrompt() {
   p += 'Their zone settings:\n';
   Object.keys(ZONES).forEach(function(id) {
     var z = ZONES[id];
-    p += '- ' + z.name + ': ' + z.distance + ', Red ' + z.red + '%, NIR ' + z.nir + '%, ' + z.duration + ' min. Goals: ' + z.goals.join(', ') + '\n';
+    p += '- ' + z.name + ': ' + z.distance + ', Power ' + z.power + ', ' + z.modes.join('+') + ', ' + z.duration + ' min, ' + z.frequency + '. Goals: ' + z.goals.join(', ') + '\n';
   });
 
   p += '\nCycle: ' + (info.isPreCycle ? 'Pre-cycle' : 'Day ' + info.cycleDay + '/7, Cycle ' + info.cycleNumber) + '\n';
@@ -1648,11 +1802,11 @@ function buildChatSystemPrompt() {
     });
   }
 
-  p += '\nKey manufacturer guidelines:\n';
-  p += '- 6\u201312" for deep tissue, 10\u201315 min, max 20 min per area, 3\u20135x/week\n';
-  p += '- NIR can aggravate hyperpigmentation \u2014 use red only on affected areas\n';
+  p += '\nKey guidelines:\n';
+  p += '- Two distance tiers: 12" at 100% (~40 mW/cm\u00b2) for surface zones, 6" at 50\u201360% (~80\u201396 mW/cm\u00b2) for deep tissue\n';
+  p += '- 100% at 6" = 160 mW/cm\u00b2, overshoots safe threshold \u2014 always reduce power at close range\n';
   p += '- Biphasic dose response: exceeding optimal dose reverses benefits\n';
-  p += '- Start farther, work closer as tolerance builds\n\n';
+  p += '- All zones use both Red + NIR together\n\n';
   p += 'Be concise and supportive. Use evidence when possible. If unsure about a medical claim, say so. Keep responses under 200 words unless detail is needed.';
   return p;
 }
@@ -1748,14 +1902,63 @@ async function sendChatMessage() {
   renderChat();
 }
 
+/* ─── Migrate old zone IDs ─── */
+function migrateSessionData() {
+  if (localStorage.getItem('glowProtocol_migrated_v2')) return;
+  var s = getSessionData();
+  var changed = false;
+  var map = {
+    'full-spine': 'spine-tricep',
+    'right-tricep': 'spine-tricep',
+    'torso-front': ['thyroid', 'abdomen'],
+    'legs-below-knee': 'legs'
+  };
+  Object.keys(s).forEach(function(dateStr) {
+    var day = s[dateStr];
+    Object.keys(map).forEach(function(oldId) {
+      if (day[oldId] !== undefined) {
+        var val = day[oldId];
+        var targets = Array.isArray(map[oldId]) ? map[oldId] : [map[oldId]];
+        targets.forEach(function(newId) {
+          if (day[newId] === undefined) day[newId] = val;
+        });
+        delete day[oldId];
+        changed = true;
+      }
+    });
+    // clean up face_blue legacy key
+    if (day.face_blue !== undefined) { delete day.face_blue; changed = true; }
+  });
+  if (changed) saveSessionData(s);
+  // also migrate overrides
+  var o = getOverrides();
+  var oChanged = false;
+  Object.keys(o).forEach(function(dateStr) {
+    var zones = o[dateStr];
+    var newZones = zones.map(function(id) {
+      if (id === 'full-spine' || id === 'right-tricep') return 'spine-tricep';
+      if (id === 'torso-front') return 'thyroid';
+      if (id === 'legs-below-knee') return 'legs';
+      return id;
+    });
+    // deduplicate
+    var unique = [];
+    newZones.forEach(function(z) { if (unique.indexOf(z) === -1) unique.push(z); });
+    if (newZones.join(',') !== zones.join(',')) { o[dateStr] = unique; oChanged = true; }
+  });
+  if (oChanged) saveOverrides(o);
+  localStorage.setItem('glowProtocol_migrated_v2', '1');
+}
+
 /* ─── Init ─── */
 function initApp() {
+  migrateSessionData();
   if (!hasLaunched()) {
     var tm = new Date(); tm.setDate(tm.getDate()+1);
     setCycleStart(dateToKey(tm));
     var s = getSessionData(); var tk = todayKey();
     if(!s[tk]) s[tk]={};
-    s[tk]['glutes-thighs']=true; s[tk]['right-tricep']=true; s[tk]['torso-front']=true;
+    s[tk]['face']=true; s[tk]['spine-tricep']=true;
     saveSessionData(s);
   }
   var now = new Date(); var info = getCycleDayForDate(todayKey());
